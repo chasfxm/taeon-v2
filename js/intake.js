@@ -1,7 +1,6 @@
-﻿(() => {
+(() => {
 
-    const API_BASE =
-        window.location.origin;
+    const API_BASE = "https://taeon-v2-api.onrender.com";
 
 
     const state = {

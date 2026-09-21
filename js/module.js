@@ -1,5 +1,4 @@
-﻿const API_BASE =
-    window.location.origin;
+const API_BASE = "https://taeon-v2-api.onrender.com";
 
 
 const config =
@@ -262,7 +261,7 @@ async function checkHealth() {
     try {
 
         await request(
-            "/health"
+            "/api/health"
         );
 
         $("apiStatus").textContent =

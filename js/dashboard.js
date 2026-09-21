@@ -1,5 +1,4 @@
-﻿const API_BASE =
-    window.location.origin;
+const API_BASE = "https://taeon-v2-api.onrender.com";
 
 
 const MODULE_PATHS = {
@@ -142,7 +141,7 @@ async function checkHealth() {
     try {
 
         await apiGet(
-            "/health"
+            "/api/health"
         );
 
 
