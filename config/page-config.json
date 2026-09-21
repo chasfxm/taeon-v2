@@ -1,0 +1,130 @@
+﻿[
+  {
+    "folder": "01_회계경리",
+    "title": "회계·경리",
+    "pages": [
+      {"file":"expense.html","title":"지출결의","description":"지출결의서 작성·조회·승인 및 지급내역 관리"},
+      {"file":"payment.html","title":"지급관리","description":"급여·거래처·공사비 등 실제 지급업무 관리"},
+      {"file":"bank-balance.html","title":"계좌·잔액","description":"법인·개인별 은행계좌와 현재 잔액 관리"},
+      {"file":"transactions.html","title":"입출금","description":"계좌별 입금·출금 및 자금흐름 관리"},
+      {"file":"payroll.html","title":"급여관리","description":"임직원·일용직 급여와 지급내역 관리"},
+      {"file":"cards.html","title":"카드관리","description":"법인카드·사용자·한도·결제일 관리"},
+      {"file":"tax-invoice.html","title":"세금계산서","description":"매입·매출 세금계산서 및 증빙관리"},
+      {"file":"tax.html","title":"부가세·세무","description":"부가세·법인세·원천세 및 세무업무 관리"},
+      {"file":"fixed-expense.html","title":"고정지출","description":"임대료·보험료·통신비 등 정기지출 관리"},
+      {"file":"vendors.html","title":"거래처","description":"거래처 기본정보·계좌·지급이력 관리"},
+      {"file":"closing.html","title":"월마감","description":"월말 회계·경리 마감업무 확인"}
+    ]
+  },
+
+  {
+    "folder": "02_현장관리",
+    "title": "현장관리",
+    "pages": [
+      {"file":"sites.html","title":"현장현황","description":"진행·완료 공사현장 전체 현황"},
+      {"file":"site-card.html","title":"현장카드","description":"공사명·발주처·기간·금액·담당자 통합관리"},
+      {"file":"progress.html","title":"공정관리","description":"현장별 공정·일정·진행률 관리"},
+      {"file":"labor.html","title":"노무관리","description":"현장 인력·근무일수·노무비 관리"},
+      {"file":"materials.html","title":"자재관리","description":"자재 주문·납품·납품확인서 관리"},
+      {"file":"subcontractors.html","title":"협력업체","description":"하도급·공사업체·협력사 관리"},
+      {"file":"safety.html","title":"안전관리","description":"안전용품·안전교육·현장 안전자료 관리"},
+      {"file":"site-documents.html","title":"현장사진·문서","description":"현장 사진·도면·확인서·증빙자료 관리"},
+      {"file":"completion.html","title":"준공·대금","description":"준공서류·기성·대금수령 업무 관리"}
+    ]
+  },
+
+  {
+    "folder": "03_계약법무",
+    "title": "계약·법무",
+    "pages": [
+      {"file":"contracts.html","title":"계약대장","description":"각종 계약서 및 계약조건 통합관리"},
+      {"file":"agreements.html","title":"협약서","description":"협약·합의·약정 문서 관리"},
+      {"file":"corporate-documents.html","title":"법인서류","description":"법인등기·사업자등록 등 법인 기본서류"},
+      {"file":"seal-certificates.html","title":"인감·증명서","description":"인감증명·사용인감 및 각종 증명자료"},
+      {"file":"licenses.html","title":"면허·등록증","description":"건설업·주택건설업 등 면허와 등록증 관리"},
+      {"file":"legal.html","title":"법무업무","description":"법무사·소송·채권·권리관계 업무 관리"},
+      {"file":"deadlines.html","title":"중요기한","description":"계약갱신·만료·법적 제출기한 관리"}
+    ]
+  },
+
+  {
+    "folder": "04_입찰",
+    "title": "입찰",
+    "pages": [
+      {"file":"bids.html","title":"입찰현황","description":"현재 검토·참여·완료 입찰 전체현황"},
+      {"file":"notices.html","title":"입찰공고","description":"공공·민간 입찰공고 관리"},
+      {"file":"bid-schedule.html","title":"입찰일정","description":"공고·마감·개찰 일정관리"},
+      {"file":"bid-documents.html","title":"제출서류","description":"입찰 참가에 필요한 제출서류 관리"},
+      {"file":"guarantees.html","title":"보증관리","description":"입찰·계약·하자·선급금 보증 관리"},
+      {"file":"bid-results.html","title":"결과·계약","description":"낙찰결과 및 계약전환 관리"}
+    ]
+  },
+
+  {
+    "folder": "05_대출금융",
+    "title": "대출·금융",
+    "pages": [
+      {"file":"loans.html","title":"대출현황","description":"회사·개인·부동산별 대출현황 관리"},
+      {"file":"collateral.html","title":"담보관리","description":"토지·건물·기타 담보자산 관리"},
+      {"file":"financial-institutions.html","title":"금융기관","description":"은행·캐피탈·저축은행 등 금융기관 관리"},
+      {"file":"repayment.html","title":"상환일정","description":"원금·이자·만기 및 상환일정 관리"},
+      {"file":"debt-guarantee.html","title":"채무·보증","description":"채무·연대보증·보증관계 관리"},
+      {"file":"finance-documents.html","title":"금융서류","description":"대출신청·소득증명·담보관련 서류 관리"},
+      {"file":"fund-plan.html","title":"자금계획","description":"필요자금·조달계획·예상자금 흐름 관리"}
+    ]
+  },
+
+  {
+    "folder": "06_차량",
+    "title": "차량",
+    "pages": [
+      {"file":"vehicles.html","title":"차량현황","description":"법인·개인 업무차량 기본정보 관리"},
+      {"file":"driving-log.html","title":"운행일지","description":"날짜·사용자·출발·도착·거리·업무목적 관리"},
+      {"file":"fuel-toll.html","title":"주유·통행료","description":"주유비·통행료·주차비 관리"},
+      {"file":"insurance-inspection.html","title":"보험·검사","description":"자동차보험·정기검사·갱신일 관리"},
+      {"file":"maintenance.html","title":"정비관리","description":"수리·소모품·정비이력 관리"},
+      {"file":"vehicle-disposal.html","title":"처분·세무","description":"차량 매각·폐차 및 세무자료 관리"}
+    ]
+  },
+
+  {
+    "folder": "07_토지부동산",
+    "title": "토지·부동산",
+    "pages": [
+      {"file":"properties.html","title":"부동산현황","description":"태온 관련 토지·건물 전체현황"},
+      {"file":"lot-address.html","title":"지번·주소","description":"필지별 지번·도로명주소·면적·지목 관리"},
+      {"file":"owners.html","title":"소유자","description":"부동산별 소유자·지분·공동소유 관계 관리"},
+      {"file":"registry.html","title":"등기정보","description":"등기사항·소유권·권리관계 관리"},
+      {"file":"mortgage.html","title":"담보·근저당","description":"근저당권·채권최고액·설정순위 관리"},
+      {"file":"loan-estimate.html","title":"대출예상","description":"채권최고액과 설정비율을 이용한 대출예상금 관리"},
+      {"file":"official-price.html","title":"공시지가","description":"공시지가·기준시가·평가금액 관리"},
+      {"file":"property-contract.html","title":"계약·거래","description":"매매·임대차·협약·대금지급 관리"},
+      {"file":"property-documents.html","title":"관련문서","description":"등기·토지대장·계약서·감정서 등 자료관리"}
+    ]
+  },
+
+  {
+    "folder": "08_정부지원행정",
+    "title": "정부지원·행정",
+    "pages": [
+      {"file":"support-programs.html","title":"지원사업","description":"정부·지자체 지원사업 및 신청현황"},
+      {"file":"permits.html","title":"인허가","description":"각종 허가·신고·승인업무 관리"},
+      {"file":"agencies.html","title":"행정기관","description":"관공서·공공기관 담당자와 업무이력 관리"},
+      {"file":"submissions.html","title":"제출서류","description":"기관별 제출자료와 제출여부 관리"},
+      {"file":"inspection.html","title":"점검·조사","description":"실태조사·현장점검·행정점검 관리"},
+      {"file":"certificates.html","title":"인증·증명","description":"장애인기업 등 각종 인증과 증명자료 관리"}
+    ]
+  },
+
+  {
+    "folder": "09_기타자료",
+    "title": "기타자료",
+    "pages": [
+      {"file":"inbox.html","title":"문서수신함","description":"아직 업무분류가 확정되지 않은 신규자료"},
+      {"file":"search.html","title":"자료검색","description":"전체 업무자료 통합검색"},
+      {"file":"contacts.html","title":"연락처·거래처","description":"사람·업체·기관 연락정보 관리"},
+      {"file":"notes.html","title":"업무메모","description":"업무 중 임시기록 및 메모 관리"},
+      {"file":"archive.html","title":"보관자료","description":"완료·종료된 장기보관 자료"}
+    ]
+  }
+]

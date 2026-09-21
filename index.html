@@ -1,0 +1,517 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>TAEON V2 관리자</title>
+
+    <link
+        rel="stylesheet"
+        href="./css/main.css"
+    >
+</head>
+
+<body>
+
+<div class="layout">
+
+
+    <!-- ============================================= -->
+    <!-- 좌측 메뉴 -->
+    <!-- ============================================= -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-title">
+                TAEON V2
+            </div>
+
+            <div class="brand-sub">
+                태온종합건설 통합관리
+            </div>
+
+        </div>
+
+
+        <nav class="menu">
+
+            <button
+                class="menu-item active"
+                data-module="dashboard"
+            >
+                통합 대시보드
+            </button>
+
+
+            <button
+                class="menu-item"
+                data-module="01_회계경리"
+            >
+                01 회계경리
+            </button>
+
+
+            <button
+                class="menu-item"
+                data-module="02_현장관리"
+            >
+                02 현장관리
+            </button>
+
+
+            <button
+                class="menu-item"
+                data-module="03_계약법무"
+            >
+                03 계약법무
+            </button>
+
+
+            <button
+                class="menu-item"
+                data-module="04_입찰"
+            >
+                04 입찰
+            </button>
+
+
+            <button
+                class="menu-item"
+                data-module="05_대출금융"
+            >
+                05 대출금융
+            </button>
+
+
+            <button
+                class="menu-item"
+                data-module="06_차량"
+            >
+                06 차량
+            </button>
+
+
+            <button
+                class="menu-item"
+                data-module="07_토지부동산"
+            >
+                07 토지부동산
+            </button>
+
+
+            <button
+                class="menu-item"
+                data-module="08_정부지원행정"
+            >
+                08 정부지원행정
+            </button>
+
+
+            <button
+                class="menu-item"
+                data-module="09_기타자료"
+            >
+                09 기타자료
+            </button>
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+            <div>
+                DOCUMENT ENGINE
+            </div>
+
+            <div>
+                EVENT ENGINE
+            </div>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- ============================================= -->
+    <!-- 메인 영역 -->
+    <!-- ============================================= -->
+
+    <main class="main">
+
+
+        <!-- 상단 -->
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    통합 대시보드
+                </h1>
+
+                <div
+                    id="currentDate"
+                    class="current-date"
+                >
+                </div>
+
+            </div>
+
+
+            <div class="top-actions">
+
+                <button
+                    id="refreshBtn"
+                    class="btn primary"
+                >
+                    새로고침
+                </button>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- API 상태 -->
+        <section class="status-bar">
+
+            <div class="status-label">
+                시스템 상태
+            </div>
+
+            <div
+                id="apiStatus"
+                class="status-value waiting"
+            >
+                확인중...
+            </div>
+
+        </section>
+
+
+
+        <!-- 요약 카드 -->
+        <section class="summary-grid">
+
+            <div class="summary-card">
+
+                <div class="summary-title">
+                    오늘 업무
+                </div>
+
+                <div
+                    id="todayCount"
+                    class="summary-number"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-title">
+                    미완료 업무
+                </div>
+
+                <div
+                    id="openCount"
+                    class="summary-number"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-title">
+                    후속조치
+                </div>
+
+                <div
+                    id="followUpCount"
+                    class="summary-number"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-title">
+                    전체 이벤트
+                </div>
+
+                <div
+                    id="eventCount"
+                    class="summary-number"
+                >
+                    0
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- 업무 바로가기 -->
+        <section class="panel">
+
+            <div class="panel-header">
+
+                <h2>
+                    업무 바로가기
+                </h2>
+
+            </div>
+
+
+            <div class="module-grid">
+
+
+                <button
+                    class="module-card"
+                    data-module="01_회계경리"
+                >
+                    <strong>
+                        01 회계경리
+                    </strong>
+
+                    <span>
+                        지출·입출금·잔액·급여·카드
+                    </span>
+                </button>
+
+
+                <button
+                    class="module-card"
+                    data-module="02_현장관리"
+                >
+                    <strong>
+                        02 현장관리
+                    </strong>
+
+                    <span>
+                        현장·자재·노무·안전·준공
+                    </span>
+                </button>
+
+
+                <button
+                    class="module-card"
+                    data-module="03_계약법무"
+                >
+                    <strong>
+                        03 계약법무
+                    </strong>
+
+                    <span>
+                        계약·협약·등기·법무
+                    </span>
+                </button>
+
+
+                <button
+                    class="module-card"
+                    data-module="04_입찰"
+                >
+                    <strong>
+                        04 입찰
+                    </strong>
+
+                    <span>
+                        공고·투찰·적격심사·낙찰
+                    </span>
+                </button>
+
+
+                <button
+                    class="module-card"
+                    data-module="05_대출금융"
+                >
+                    <strong>
+                        05 대출금융
+                    </strong>
+
+                    <span>
+                        대출·담보·근저당·상환
+                    </span>
+                </button>
+
+
+                <button
+                    class="module-card"
+                    data-module="06_차량"
+                >
+                    <strong>
+                        06 차량
+                    </strong>
+
+                    <span>
+                        차량정보·운행·주유·정비
+                    </span>
+                </button>
+
+
+                <button
+                    class="module-card"
+                    data-module="07_토지부동산"
+                >
+                    <strong>
+                        07 토지부동산
+                    </strong>
+
+                    <span>
+                        토지·건물·등기·임대차·매매
+                    </span>
+                </button>
+
+
+                <button
+                    class="module-card"
+                    data-module="08_정부지원행정"
+                >
+                    <strong>
+                        08 정부지원행정
+                    </strong>
+
+                    <span>
+                        공문·지원·보조금·행정서류
+                    </span>
+                </button>
+
+
+                <button
+                    class="module-card"
+                    data-module="09_기타자료"
+                >
+                    <strong>
+                        09 기타자료
+                    </strong>
+
+                    <span>
+                        일반자료·사진·메모·분류대기
+                    </span>
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- 최근 이벤트 + 후속조치 -->
+        <section class="two-column">
+
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h2>
+                        최근 업무이력
+                    </h2>
+
+                    <button
+                        id="loadEventsBtn"
+                        class="btn"
+                    >
+                        조회
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="recentEvents"
+                    class="list-area"
+                >
+
+                    <div class="empty">
+                        불러오는 중...
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h2>
+                        후속조치
+                    </h2>
+
+                </div>
+
+
+                <div
+                    id="followUpList"
+                    class="list-area"
+                >
+
+                    <div class="empty">
+                        불러오는 중...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- 최근 문서 -->
+        <section class="panel">
+
+            <div class="panel-header">
+
+                <h2>
+                    최근 등록 문서
+                </h2>
+
+            </div>
+
+
+            <div
+                id="recentDocuments"
+                class="list-area"
+            >
+
+                <div class="empty">
+                    불러오는 중...
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<script
+    src="./js/dashboard.js"
+></script>
+
+</body>
+</html>

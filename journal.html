@@ -1,0 +1,325 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        태온 V2 업무일지
+    </title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f4f6f8;
+            font-family:
+                Arial,
+                "Malgun Gothic",
+                sans-serif;
+            color: #172033;
+        }
+
+        .wrap {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .back {
+            text-decoration: none;
+            color: #172033;
+            border: 1px solid #ccd3dc;
+            background: white;
+            padding: 9px 14px;
+            border-radius: 6px;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid #dde3ea;
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 16px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        input,
+        button {
+            height: 38px;
+            border-radius: 6px;
+            border: 1px solid #ccd3dc;
+            padding: 0 12px;
+            font-size: 14px;
+        }
+
+        button {
+            cursor: pointer;
+            background: #111827;
+            color: white;
+            border-color: #111827;
+        }
+
+        button.secondary {
+            background: white;
+            color: #172033;
+            border-color: #ccd3dc;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns:
+                repeat(
+                    6,
+                    minmax(100px, 1fr)
+                );
+            gap: 10px;
+        }
+
+        .card {
+            border: 1px solid #e1e6ec;
+            border-radius: 7px;
+            padding: 14px;
+            background: #fafbfc;
+        }
+
+        .label {
+            font-size: 12px;
+            color: #697386;
+            margin-bottom: 6px;
+        }
+
+        .value {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 500px;
+            resize: vertical;
+            border: 1px solid #d9e0e7;
+            border-radius: 7px;
+            padding: 16px;
+            font-family:
+                "Malgun Gothic",
+                monospace;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .status {
+            margin-left: 8px;
+            font-size: 13px;
+            color: #1f7a50;
+        }
+
+        @media (
+            max-width: 900px
+        ) {
+
+            .summary {
+                grid-template-columns:
+                    repeat(
+                        3,
+                        1fr
+                    );
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="wrap">
+
+    <div class="top">
+
+        <h1>
+            태온 V2 업무일지
+        </h1>
+
+        <a
+            class="back"
+            href="/"
+        >
+            통합 대시보드
+        </a>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="controls">
+
+            <input
+                id="journalDate"
+                type="date"
+            >
+
+            <button
+                id="todayBtn"
+                type="button"
+                class="secondary"
+            >
+                오늘
+            </button>
+
+            <button
+                id="loadBtn"
+                type="button"
+            >
+                업무일지 생성
+            </button>
+
+            <button
+                id="copyBtn"
+                type="button"
+                class="secondary"
+            >
+                내용 복사
+            </button>
+
+            <span
+                id="status"
+                class="status"
+            ></span>
+
+        </div>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="summary">
+
+            <div class="card">
+                <div class="label">
+                    전체 업무
+                </div>
+                <div
+                    id="total"
+                    class="value"
+                >
+                    0
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="label">
+                    진행중
+                </div>
+                <div
+                    id="open"
+                    class="value"
+                >
+                    0
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="label">
+                    완료
+                </div>
+                <div
+                    id="done"
+                    class="value"
+                >
+                    0
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="label">
+                    후속조치
+                </div>
+                <div
+                    id="followUp"
+                    class="value"
+                >
+                    0
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="label">
+                    연결문서
+                </div>
+                <div
+                    id="documents"
+                    class="value"
+                >
+                    0
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="label">
+                    개발이력
+                </div>
+                <div
+                    id="development"
+                    class="value"
+                >
+                    0
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="panel">
+
+        <textarea
+            id="journalText"
+            readonly
+        ></textarea>
+
+    </div>
+
+</div>
+
+
+<script
+    src="/js/journal.js"
+></script>
+
+</body>
+
+</html>

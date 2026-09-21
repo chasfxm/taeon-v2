@@ -1,0 +1,248 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>자금계획 | 태온 V2</title>
+
+<link
+    rel="stylesheet"
+    href="/common/base.css"
+>
+
+</head>
+
+
+<body
+    data-page-key="05_대출금융/fund-plan.html"
+    data-generated="TAEON_PAGE_GENERATOR_V2"
+>
+
+<header
+    id="commonHeader"
+    class="taeon-header"
+></header>
+
+
+<div class="layout">
+
+    <nav
+        id="commonNavigation"
+        class="sidebar"
+    ></nav>
+
+
+    <main class="work-area">
+
+        <div class="page-head">
+
+            <div>
+
+                <h1 class="page-title">
+                    자금계획
+                </h1>
+
+                <div class="page-description">
+                    필요자금·조달계획·예상자금 흐름 관리
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="toolbar">
+
+            <button
+                type="button"
+                class="btn btn-primary"
+            >
+                신규 등록
+            </button>
+
+            <button
+                type="button"
+                class="btn"
+            >
+                조회
+            </button>
+
+            <button
+                type="button"
+                class="btn"
+                onclick="location.reload()"
+            >
+                새로고침
+            </button>
+
+        </div>
+
+
+        <section class="panel">
+
+            <strong>
+                자금계획
+            </strong>
+
+            <p>
+                실제 업무 데이터와 기능을 이 영역에 연결합니다.
+            </p>
+
+            <p>
+                MASTER 화면 구조는 고정하고
+                업무별 항목·표·버튼만 이 영역에서 변경합니다.
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <aside class="memo-area">
+
+        <h3>
+            업무 메모
+        </h3>
+
+        <textarea
+            id="workMemo"
+            placeholder="이 페이지 관련 메모를 입력하세요."
+        ></textarea>
+
+        <div style="margin-top:8px;">
+
+            <button
+                id="saveMemo"
+                class="btn btn-primary"
+                type="button"
+            >
+                메모 저장
+            </button>
+
+        </div>
+
+    </aside>
+
+</div>
+
+
+<div
+    id="settingsPanel"
+    class="settings-panel"
+>
+
+    <h3>
+        화면 설정
+    </h3>
+
+
+    <div class="setting-row">
+
+        <label>
+            글자 크기
+        </label>
+
+        <input
+            id="settingFontSize"
+            type="number"
+            min="11"
+            max="22"
+        >
+
+    </div>
+
+
+    <div class="setting-row">
+
+        <label>
+            메뉴 폭
+        </label>
+
+        <input
+            id="settingSidebarWidth"
+            type="number"
+            min="160"
+            max="400"
+        >
+
+    </div>
+
+
+    <div class="setting-row">
+
+        <label>
+            메모 폭
+        </label>
+
+        <input
+            id="settingMemoWidth"
+            type="number"
+            min="220"
+            max="600"
+        >
+
+    </div>
+
+
+    <div class="setting-row">
+
+        <label>
+            <input
+                id="settingSidebarVisible"
+                type="checkbox"
+            >
+            메뉴 표시
+        </label>
+
+    </div>
+
+
+    <div class="setting-row">
+
+        <label>
+            <input
+                id="settingMemoVisible"
+                type="checkbox"
+            >
+            메모 표시
+        </label>
+
+    </div>
+
+
+    <button
+        id="settingsApply"
+        class="btn btn-primary"
+        type="button"
+    >
+        적용
+    </button>
+
+    <button
+        id="settingsReset"
+        class="btn"
+        type="button"
+    >
+        기본값
+    </button>
+
+</div>
+
+
+<script src="/common/shell.js"></script>
+<script src="/common/base.js"></script>
+
+<script src="/common/editor.js"></script>
+
+</body>
+
+</html>
+
+

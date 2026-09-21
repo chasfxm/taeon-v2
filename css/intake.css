@@ -1,0 +1,273 @@
+﻿/* ===================================================== */
+/* TAEON COMMON INTAKE */
+/* ===================================================== */
+
+.intake-panel {
+    margin-bottom: 18px;
+    padding: 15px 17px;
+    background: #ffffff;
+    border: 2px solid #d9dee7;
+    border-radius: 10px;
+}
+
+.intake-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 12px;
+}
+
+.intake-title {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.intake-target {
+    font-size: 13px;
+    color: #5d6675;
+}
+
+.intake-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.intake-drop {
+    min-height: 150px;
+    border: 2px dashed #aeb7c4;
+    border-radius: 9px;
+    padding: 18px;
+    background: #fafbfc;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.intake-drop.drag {
+    border-color: #111827;
+    background: #f0f3f7;
+}
+
+.intake-drop strong {
+    font-size: 15px;
+}
+
+.intake-drop small {
+    margin-top: 7px;
+    color: #6b7280;
+    line-height: 1.5;
+}
+
+.intake-file-name {
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.intake-buttons {
+    margin-top: 12px;
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.intake-text textarea {
+    min-height: 150px;
+}
+
+.intake-preview {
+    margin-top: 12px;
+    display: none;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 13px;
+}
+
+.intake-preview.show {
+    display: block;
+}
+
+.intake-preview-grid {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 6px 12px;
+    font-size: 13px;
+}
+
+.intake-preview-label {
+    font-weight: 700;
+}
+
+.intake-preview-text {
+    margin-top: 10px;
+    max-height: 230px;
+    overflow: auto;
+    padding: 12px;
+    border-radius: 7px;
+    border: 1px solid #dfe3e8;
+    background: #f8fafc;
+    white-space: pre-wrap;
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.intake-result {
+    margin-top: 10px;
+    min-height: 18px;
+    font-size: 13px;
+}
+
+.intake-result.ok {
+    color: #157347;
+}
+
+.intake-result.error {
+    color: #b42318;
+}
+
+@media (max-width: 900px) {
+    .intake-body {
+        grid-template-columns: 1fr;
+    }
+}
+
+.intake-fields {
+    margin-top: 12px;
+    padding: 13px;
+    border: 1px solid #dce2e9;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+.intake-fields-title {
+    margin-bottom: 10px;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.intake-field-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.intake-field {
+    padding: 9px 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 7px;
+    background: #f8fafc;
+}
+
+.intake-field-label {
+    font-size: 11px;
+    color: #6b7280;
+    margin-bottom: 4px;
+}
+
+.intake-field-value {
+    font-size: 13px;
+    font-weight: 700;
+    word-break: break-all;
+}
+
+.intake-field.empty-value
+.intake-field-value {
+    color: #adb5bd;
+    font-weight: 400;
+}
+
+@media (max-width: 1100px) {
+
+    .intake-field-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+/* ===================================================== */
+/* Intake UI action controls V1 */
+/* ===================================================== */
+
+.intake-main-actions {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.intake-main-actions #applyIntakeBtn {
+    margin-right: 0;
+}
+
+.intake-main-actions .intake-status-badge {
+    margin-left: 8px;
+}
+
+.intake-new-button {
+    margin-left: auto;
+    border-color: #cfd5dd;
+    background: #ffffff;
+    color: #374151;
+}
+
+.intake-new-button:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+}
+
+#applyIntakeBtn.disabled,
+#applyIntakeBtn:disabled {
+    opacity: 0.42;
+    cursor: not-allowed;
+}
+
+.intake-status-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.intake-status-badge.waiting {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+.intake-status-badge.working {
+    background: #fff7ed;
+    color: #9a5800;
+}
+
+.intake-status-badge.ready {
+    background: #eef7ff;
+    color: #1d5f91;
+}
+
+.intake-status-badge.done {
+    background: #edf8f1;
+    color: #157347;
+}
+
+.intake-status-badge.error {
+    background: #fff1f0;
+    color: #b42318;
+}
+
+.intake-field.detected {
+    border-color: #cdd8e5;
+    background: #ffffff;
+}
+
+.intake-field.detected .intake-field-value {
+    color: #111827;
+}
+
