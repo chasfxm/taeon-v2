@@ -1,4 +1,4 @@
-﻿(() => {
+(() => {
 
     function $(
         id
@@ -191,7 +191,7 @@
 
         const response =
             await fetch(
-                `/api/followups?date=${
+                `https://taeon-v2-api.onrender.com/api/followups?date=${
                     encodeURIComponent(
                         date
                     )
