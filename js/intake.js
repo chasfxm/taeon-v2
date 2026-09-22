@@ -1107,6 +1107,223 @@
     }
 
 
+
+    // =====================================================
+    // TAEON V2 : 자동판독 결과 → 업무등록 폼 자동채움
+    // =====================================================
+
+    function taeonExtractValue(text, labels) {
+
+        const source =
+            String(text || "");
+
+        for (const label of labels) {
+
+            const escaped =
+                label.replace(
+                    /[.*+?^${}()|[\]\\]/g,
+                    "\\$&"
+                );
+
+            const pattern =
+                new RegExp(
+                    "(?:^|\\n)\\s*" +
+                    escaped +
+                    "\\s*[:：]\\s*([^\\r\\n]+)",
+                    "i"
+                );
+
+            const match =
+                source.match(pattern);
+
+            if (match && match[1]) {
+                return match[1].trim();
+            }
+        }
+
+        return "";
+    }
+
+
+    function taeonFillBusinessForm(data) {
+
+        const fields =
+            data.fields || {};
+
+        const sourceText =
+            String(
+                data.previewText ||
+                document.getElementById("intakeText")?.value ||
+                ""
+            ).trim();
+
+
+        const payee =
+            taeonExtractValue(
+                sourceText,
+                [
+                    "지급대상",
+                    "지급처",
+                    "수령인",
+                    "대상자"
+                ]
+            );
+
+
+        const salaryMonth =
+            taeonExtractValue(
+                sourceText,
+                [
+                    "급여월",
+                    "급여 월"
+                ]
+            );
+
+
+        const memoTitle =
+            taeonExtractValue(
+                sourceText,
+                [
+                    "적요",
+                    "업무명",
+                    "제목"
+                ]
+            );
+
+
+        let title =
+            memoTitle;
+
+
+        if (!title && payee && salaryMonth) {
+
+            title =
+                payee +
+                " " +
+                salaryMonth +
+                " 급여 지급";
+        }
+
+
+        if (!title && payee) {
+
+            title =
+                payee +
+                " " +
+                (
+                    window.__TAEON_SELECTED_FEATURE__ ||
+                    "업무"
+                );
+        }
+
+
+        if (!title) {
+
+            title =
+                (
+                    window.__TAEON_SELECTED_FEATURE__ ||
+                    fields.documentType ||
+                    "업무"
+                ) +
+                " 자료";
+        }
+
+
+        const company =
+            fields.company ||
+            taeonExtractValue(
+                sourceText,
+                [
+                    "회사",
+                    "업체명"
+                ]
+            ) ||
+            "주식회사 태온종합건설";
+
+
+        const site =
+            fields.site ||
+            taeonExtractValue(
+                sourceText,
+                [
+                    "현장",
+                    "관련장소"
+                ]
+            ) ||
+            "";
+
+
+        const eventTitle =
+            document.getElementById(
+                "eventTitle"
+            );
+
+        const eventCompany =
+            document.getElementById(
+                "eventCompany"
+            );
+
+        const eventSite =
+            document.getElementById(
+                "eventSite"
+            );
+
+        const eventContent =
+            document.getElementById(
+                "eventContent"
+            );
+
+        const documentTitle =
+            document.getElementById(
+                "documentTitle"
+            );
+
+        const documentMemo =
+            document.getElementById(
+                "documentMemo"
+            );
+
+
+        if (eventTitle) {
+            eventTitle.value = title;
+        }
+
+        if (eventCompany) {
+            eventCompany.value = company;
+        }
+
+        if (eventSite) {
+            eventSite.value = site;
+        }
+
+        if (eventContent) {
+            eventContent.value = sourceText;
+        }
+
+        /*
+         * 기존 intake/apply가 이 두 필드를 사용하므로
+         * 문서 + 이벤트 제목/내용도 실제 업무명으로 저장됨
+         */
+        if (documentTitle) {
+            documentTitle.value = title;
+        }
+
+        if (documentMemo) {
+            documentMemo.value = sourceText;
+        }
+    }
+
+
+    window.addEventListener(
+        "taeon:intake-preview",
+        event => {
+
+            taeonFillBusinessForm(
+                event.detail || {}
+            );
+        }
+    );
+
     bind();
 
 })();
