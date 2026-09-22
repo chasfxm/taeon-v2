@@ -1184,6 +1184,7 @@
             taeonExtractValue(
                 sourceText,
                 [
+                    "업무 제목",
                     "적요",
                     "업무명",
                     "제목"
