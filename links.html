@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TAEON V2 바로가기</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:
+        Arial,
+        "Noto Sans KR",
+        sans-serif;
+    background:#f3f6fa;
+    color:#172033;
+}
+
+.top{
+    background:#172033;
+    color:#fff;
+    padding:24px 30px;
+}
+
+.top-inner{
+    max-width:1400px;
+    margin:0 auto;
+}
+
+.top h1{
+    margin:0;
+    font-size:28px;
+}
+
+.top p{
+    margin:8px 0 0;
+    color:#c8d2e1;
+    font-size:14px;
+}
+
+.page{
+    max-width:1400px;
+    margin:0 auto;
+    padding:26px;
+}
+
+.toolbar{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:22px;
+}
+
+.search{
+    flex:1;
+    min-width:250px;
+    padding:12px 14px;
+    border:1px solid #cfd8e3;
+    border-radius:8px;
+    font-size:14px;
+    background:#fff;
+}
+
+.home-btn{
+    border:0;
+    border-radius:8px;
+    padding:11px 16px;
+    background:#2563eb;
+    color:#fff;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.section{
+    margin-bottom:30px;
+}
+
+.section-title{
+    font-size:18px;
+    font-weight:800;
+    margin-bottom:12px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(260px,1fr)
+        );
+    gap:12px;
+}
+
+.card{
+    background:#fff;
+    border:1px solid #dce3ec;
+    border-radius:12px;
+    padding:16px;
+    transition:.15s ease;
+}
+
+.card:hover{
+    border-color:#8fb0df;
+    transform:translateY(-1px);
+    box-shadow:0 4px 14px rgba(15,23,42,.07);
+}
+
+.card h3{
+    margin:0 0 7px;
+    font-size:16px;
+}
+
+.card p{
+    margin:0 0 14px;
+    font-size:13px;
+    line-height:1.55;
+    color:#667085;
+}
+
+.actions{
+    display:flex;
+    gap:7px;
+}
+
+.open-btn,
+.copy-btn{
+    border:0;
+    border-radius:7px;
+    padding:8px 11px;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.open-btn{
+    background:#1f6feb;
+    color:#fff;
+}
+
+.copy-btn{
+    background:#edf2f7;
+    color:#334155;
+}
+
+.system{
+    border-left:4px solid #16a34a;
+}
+
+.api{
+    border-left:4px solid #f59e0b;
+}
+
+.footer{
+    margin-top:34px;
+    padding-top:18px;
+    border-top:1px solid #dbe2ea;
+    color:#7a8699;
+    font-size:12px;
+}
+
+.hidden{
+    display:none !important;
+}
+
+@media(max-width:700px){
+
+    .page{
+        padding:16px;
+    }
+
+    .top{
+        padding:20px;
+    }
+
+    .top h1{
+        font-size:23px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<header class="top">
+    <div class="top-inner">
+        <h1>TAEON V2 바로가기</h1>
+        <p>
+            태온 V2 업무페이지 · 업무일지 · 후속조치 · API 상태를 한 화면에서 이동합니다.
+        </p>
+    </div>
+</header>
+
+<main class="page">
+
+    <div class="toolbar">
+
+        <input
+            id="search"
+            class="search"
+            type="text"
+            placeholder="메뉴 검색 예: 회계, 계약, 차량, API"
+        >
+
+        <button
+            class="home-btn"
+            onclick="openLink('https://taeon-v2.onrender.com/')"
+        >
+            통합 대시보드
+        </button>
+
+    </div>
+
+
+    <section class="section">
+
+        <div class="section-title">
+            업무 모듈
+        </div>
+
+        <div class="grid">
+
+            <div class="card" data-search="01 회계 경리 지출 급여">
+                <h3>01 회계경리</h3>
+                <p>회계 · 경리 · 지출결의 · 급여 · 금융자료</p>
+                <div class="actions">
+                    <button class="open-btn" onclick="openLink(LINKS.accounting)">열기</button>
+                    <button class="copy-btn" onclick="copyLink(LINKS.accounting)">주소복사</button>
+                </div>
+            </div>
+
+            <div class="card" data-search="02 현장 관리 공사">
+                <h3>02 현장관리</h3>
+                <p>공사현장 · 진행상황 · 현장자료 관리</p>
+                <div class="actions">
+                    <button class="open-btn" onclick="openLink(LINKS.site)">열기</button>
+                    <button class="copy-btn" onclick="copyLink(LINKS.site)">주소복사</button>
+                </div>
+            </div>
+
+            <div class="card" data-search="03 계약 법무 계약서">
+                <h3>03 계약법무</h3>
+                <p>계약 · 법무 · 협약 · 계약서 검토</p>
+                <div class="actions">
+                    <button class="open-btn" onclick="openLink(LINKS.legal)">열기</button>
+                    <button class="copy-btn" onclick="copyLink(LINKS.legal)">주소복사</button>
+                </div>
+            </div>
+
+            <div class="card" data-search="04 입찰 조달">
+                <h3>04 입찰</h3>
+                <p>입찰 · 조달 · 공공사업 관련 업무</p>
+                <div class="actions">
+                    <button class="open-btn" onclick="openLink(LINKS.bid)">열기</button>
+                    <button class="copy-btn" onclick="copyLink(LINKS.bid)">주소복사</button>
+                </div>
+            </div>
+
+            <div class="card" data-search="05 대출 금융 은행">
+                <h3>05 대출금융</h3>
+                <p>대출 · 금융 · 은행 · 자금 관련 업무</p>
+                <div class="actions">
+                    <button class="open-btn" onclick="openLink(LINKS.finance)">열기</button>
+                    <button class="copy-btn" onclick="copyLink(LINKS.finance)">주소복사</button>
+                </div>
+            </div>
+
+            <div class="card" data-search="06 차량 운행일지 자동차">
+                <h3>06 차량</h3>
+                <p>차량정보 · 운행일지 · 비용 관리</p>
+                <div class="actions">
+                    <button class="open-btn" onclick="openLink(LINKS.vehicle)">열기</button>
+                    <button class="copy-btn" onclick="copyLink(LINKS.vehicle)">주소복사</button>
+                </div>
+            </div>
+
+            <div class="card" data-search="07 토지 부동산">
+                <h3>07 토지부동산</h3>
+                <p>토지 · 건물 · 부동산 · 자산관리</p>
+                <div class="actions">
+                    <button class="open-btn" onclick="openLink(LINKS.land)">열기</button>
+                    <button class="copy-btn" onclick="copyLink(LINKS.land)">주소복사</button>
+                </div>
+            </div>
+
+            <div class="card" data-search="08 정부 지원 행정">
+                <h3>08 정부지원행정</h3>
+                <p>정부지원 · 행정 · 공공기관 관련 업무</p>
+                <div class="actions">
+                    <button class="open-btn" onclick="openLink(LINKS.gov)">열기</button>
+                    <button class="copy-btn" onclick="copyLink(LINKS.gov)">주소복사</button>
+                </div>
+            </div>
+
+            <div class="card" data-search="09 기타 자료">
+                <h3>09 기타자료</h3>
+                <p>분류되지 않은 기타 업무자료</p>
+                <div class="actions">
+                    <button class="open-btn" onclick="openLink(LINKS.etc)">열기</button>
+                    <button class="copy-btn" onclick="copyLink(LINKS.etc)">주소복사</button>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="section">
+
+        <div class="section-title">
+            업무관리
+        </div>
+
+        <div class="grid">
+
+            <div class="card system" data-search="업무 일지 journal">
+                <h3>업무일지</h3>
+                <p>일일 업무 및 진행내용 확인</p>
+                <div class="actions">
+                    <button class="open-btn" onclick="openLink(LINKS.journal)">열기</button>
+                    <button class="copy-btn" onclick="copyLink(LINKS.journal)">주소복사</button>
+                </div>
+            </div>
+
+            <div class="card system" data-search="일정 후속조치 followups">
+                <h3>일정 · 후속조치</h3>
+                <p>예정업무 · 후속조치 · 일정관리</p>
+                <div class="actions">
+                    <button class="open-btn" onclick="openLink(LINKS.followups)">열기</button>
+                    <button class="copy-btn" onclick="copyLink(LINKS.followups)">주소복사</button>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="section">
+
+        <div class="section-title">
+            시스템 · API
+        </div>
+
+        <div class="grid">
+
+            <div class="card api" data-search="api 상태 health">
+                <h3>API 상태 확인</h3>
+                <p>TAEON V2 API 서버 동작 상태 확인</p>
+                <div class="actions">
+                    <button class="open-btn" onclick="openLink(LINKS.health)">열기</button>
+                    <button class="copy-btn" onclick="copyLink(LINKS.health)">주소복사</button>
+                </div>
+            </div>
+
+            <div class="card api" data-search="api events 업무 이벤트">
+                <h3>업무 이벤트 확인</h3>
+                <p>현재 API 업무 이벤트 데이터 확인</p>
+                <div class="actions">
+                    <button class="open-btn" onclick="openLink(LINKS.events)">열기</button>
+                    <button class="copy-btn" onclick="copyLink(LINKS.events)">주소복사</button>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <div class="footer">
+        TAEON V2 · 업무 바로가기 허브
+    </div>
+
+</main>
+
+
+<script>
+
+const BASE =
+    "https://taeon-v2.onrender.com";
+
+const API =
+    "https://taeon-v2-api.onrender.com";
+
+
+const LINKS = {
+
+    accounting:
+        BASE +
+        "/modules/01_%ED%9A%8C%EA%B3%84%EA%B2%BD%EB%A6%AC.html",
+
+    site:
+        BASE +
+        "/modules/02_%ED%98%84%EC%9E%A5%EA%B4%80%EB%A6%AC.html",
+
+    legal:
+        BASE +
+        "/modules/03_%EA%B3%84%EC%95%BD%EB%B2%95%EB%AC%B4.html",
+
+    bid:
+        BASE +
+        "/modules/04_%EC%9E%85%EC%B0%B0.html",
+
+    finance:
+        BASE +
+        "/modules/05_%EB%8C%80%EC%B6%9C%EA%B8%88%EC%9C%B5.html",
+
+    vehicle:
+        BASE +
+        "/modules/06_%EC%B0%A8%EB%9F%89.html",
+
+    land:
+        BASE +
+        "/modules/07_%ED%86%A0%EC%A7%80%EB%B6%80%EB%8F%99%EC%82%B0.html",
+
+    gov:
+        BASE +
+        "/modules/08_%EC%A0%95%EB%B6%80%EC%A7%80%EC%9B%90%ED%96%89%EC%A0%95.html",
+
+    etc:
+        BASE +
+        "/modules/09_%EA%B8%B0%ED%83%80%EC%9E%90%EB%A3%8C.html",
+
+    journal:
+        BASE +
+        "/journal.html",
+
+    followups:
+        BASE +
+        "/followups.html",
+
+    health:
+        API +
+        "/api/health",
+
+    events:
+        API +
+        "/api/events"
+};
+
+
+function openLink(url){
+
+    window.open(
+        url,
+        "_blank",
+        "noopener"
+    );
+}
+
+
+async function copyLink(url){
+
+    try{
+
+        await navigator.clipboard.writeText(
+            url
+        );
+
+        alert(
+            "주소를 복사했습니다."
+        );
+
+    }
+    catch{
+
+        prompt(
+            "주소를 복사하세요.",
+            url
+        );
+    }
+}
+
+
+document
+    .getElementById(
+        "search"
+    )
+    .addEventListener(
+        "input",
+        event => {
+
+            const keyword =
+                event.target.value
+                    .trim()
+                    .toLowerCase();
+
+
+            document
+                .querySelectorAll(
+                    ".card"
+                )
+                .forEach(
+                    card => {
+
+                        const text =
+                            (
+                                card.textContent +
+                                " " +
+                                (
+                                    card.dataset.search ||
+                                    ""
+                                )
+                            )
+                            .toLowerCase();
+
+
+                        card.classList.toggle(
+                            "hidden",
+                            keyword &&
+                            !text.includes(
+                                keyword
+                            )
+                        );
+                    }
+                );
+        }
+    );
+
+</script>
+
+</body>
+</html>
