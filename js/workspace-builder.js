@@ -1039,38 +1039,122 @@ ${renderTemplate(code,data)}
     const blockId =
         ${safeBlockId};
 
-    function reportHeight(){
+    let lastReportedHeight =
+        0;
+
+    let reportTimer =
+        null;
+
+
+    function measureHeight(){
+
+        const body =
+            document.body;
+
+        const html =
+            document.documentElement;
+
 
         const height =
             Math.max(
-                document.body.scrollHeight,
-                document.documentElement.scrollHeight,
+                body
+                    ? body.scrollHeight
+                    : 0,
+
+                body
+                    ? body.offsetHeight
+                    : 0,
+
+                html
+                    ? html.scrollHeight
+                    : 0,
+
+                html
+                    ? html.offsetHeight
+                    : 0,
+
                 80
             );
 
-        parent.postMessage(
-            {
-                type:
-                    "TAEON_HTML_HEIGHT",
 
-                blockId,
-
-                height
-            },
-            "*"
+        return Math.ceil(
+            height
         );
     }
+
+
+    function reportHeight(){
+
+        window.clearTimeout(
+            reportTimer
+        );
+
+
+        reportTimer =
+            window.setTimeout(
+                () => {
+
+                    const height =
+                        measureHeight();
+
+
+                    /*
+                     * 동일 높이는 다시 부모로 보내지 않는다.
+                     * iframe 높이 변경 →
+                     * ResizeObserver →
+                     * 동일 높이 재전송 루프를 차단한다.
+                     */
+                    if (
+                        Math.abs(
+                            height -
+                            lastReportedHeight
+                        ) <= 1
+                    ) {
+
+                        return;
+                    }
+
+
+                    lastReportedHeight =
+                        height;
+
+
+                    parent.postMessage(
+                        {
+                            type:
+                                "TAEON_HTML_HEIGHT",
+
+                            blockId,
+
+                            height
+                        },
+                        "*"
+                    );
+
+                },
+                40
+            );
+    }
+
 
     window.addEventListener(
         "load",
         reportHeight
     );
 
+
+    /*
+     * 브라우저 창 폭 변경 시에만 재측정
+     */
     window.addEventListener(
         "resize",
         reportHeight
     );
 
+
+    /*
+     * 콘텐츠 자체의 실제 크기 변경 감지
+     */
     if (
         typeof ResizeObserver !==
         "undefined"
@@ -1078,22 +1162,57 @@ ${renderTemplate(code,data)}
 
         const observer =
             new ResizeObserver(
-                reportHeight
+                () => {
+
+                    reportHeight();
+                }
             );
 
-        observer.observe(
+
+        if (
             document.body
-        );
+        ) {
+
+            observer.observe(
+                document.body
+            );
+        }
     }
 
-    setTimeout(
-        reportHeight,
-        50
+
+    /*
+     * 이미지 등 지연 렌더링 대응
+     */
+    document.querySelectorAll(
+        "img"
+    )
+    .forEach(
+        image => {
+
+            image.addEventListener(
+                "load",
+                reportHeight,
+                {
+                    once:
+                        true
+                }
+            );
+        }
     );
 
-    setTimeout(
+
+    reportHeight();
+
+
+    window.setTimeout(
         reportHeight,
-        300
+        150
+    );
+
+
+    window.setTimeout(
+        reportHeight,
+        600
     );
 
 })();
@@ -3199,17 +3318,39 @@ ${
                             const height =
                                 Math.max(
                                     80,
-                                    Number(
-                                        data.height
-                                    ) || 80
+                                    Math.ceil(
+                                        Number(
+                                            data.height
+                                        ) || 80
+                                    )
                                 );
 
 
+                            const currentHeight =
+                                Math.ceil(
+                                    parseFloat(
+                                        frame.style.height
+                                    ) || 0
+                                );
+
+
+                            /*
+                             * 같은 높이는 다시 적용하지 않는다.
+                             * 기존 +4px 누적 증가를 완전히 제거한다.
+                             */
+                            if (
+                                Math.abs(
+                                    currentHeight -
+                                    height
+                                ) <= 1
+                            ) {
+
+                                return;
+                            }
+
+
                             frame.style.height =
-                                (
-                                    height +
-                                    4
-                                ) +
+                                height +
                                 "px";
                         }
                     }
