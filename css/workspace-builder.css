@@ -1,0 +1,467 @@
+/* TAEON V2 WORKSPACE BUILDER */
+
+.taeon-workspace-shell{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 300px;
+    gap:12px;
+    align-items:start;
+    margin-top:12px;
+}
+
+.taeon-workspace-main,
+.taeon-workspace-side{
+    min-width:0;
+}
+
+.taeon-workspace-side{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    position:sticky;
+    top:10px;
+}
+
+.taeon-fixed-card,
+.taeon-side-card,
+.taeon-page-heading,
+.taeon-system-box,
+.taeon-html-block{
+    background:#fff;
+    border:1px solid #dbe2ea;
+    border-radius:10px;
+    box-shadow:0 1px 2px rgba(15,23,42,.04);
+}
+
+.taeon-fixed-card,
+.taeon-side-card{
+    padding:10px;
+}
+
+.taeon-card-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:8px;
+}
+
+.taeon-card-head>div{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+}
+
+.taeon-card-head small{
+    color:#64748b;
+    font-size:11px;
+}
+
+.taeon-data-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:6px;
+}
+
+.taeon-data-cell{
+    min-width:0;
+    padding:6px 8px;
+    background:#f8fafc;
+    border:1px solid #e5e7eb;
+    border-radius:7px;
+}
+
+.taeon-data-cell span{
+    display:block;
+    color:#64748b;
+    font-size:10px;
+    margin-bottom:2px;
+}
+
+.taeon-data-cell b{
+    display:block;
+    font-size:12px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    color:#94a3b8;
+}
+
+.taeon-data-cell.has-value b{
+    color:#111827;
+}
+
+.taeon-data-keys{
+    margin-top:7px;
+    padding-top:7px;
+    border-top:1px dashed #dbe2ea;
+    color:#64748b;
+    font-size:10px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.taeon-page-heading{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    padding:10px 12px;
+    margin-top:10px;
+}
+
+.taeon-page-heading h2{
+    font-size:15px;
+    margin:0;
+}
+
+.taeon-page-heading p{
+    font-size:11px;
+    color:#64748b;
+    margin:3px 0 0;
+}
+
+.taeon-primary,
+.taeon-side-card button,
+.taeon-html-actions button{
+    border:1px solid #cbd5e1;
+    background:#fff;
+    color:#0f172a;
+    border-radius:6px;
+    padding:6px 9px;
+    cursor:pointer;
+    font-size:11px;
+}
+
+.taeon-primary{
+    background:#0f172a;
+    color:#fff;
+    border-color:#0f172a;
+}
+
+.taeon-html-block{
+    margin-top:10px;
+    overflow:hidden;
+}
+
+.taeon-html-toolbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:7px 9px;
+    border-bottom:1px solid #e5e7eb;
+    background:#f8fafc;
+}
+
+.taeon-html-toolbar strong{
+    font-size:12px;
+}
+
+.taeon-html-actions{
+    display:flex;
+    gap:4px;
+}
+
+.taeon-html-actions button{
+    padding:4px 7px;
+}
+
+.taeon-html-actions button.danger{
+    color:#b91c1c;
+}
+
+.taeon-html-actions button:disabled{
+    opacity:.35;
+    cursor:not-allowed;
+}
+
+.taeon-html-frame{
+    display:block;
+    width:100%;
+    min-height:110px;
+    border:0;
+    background:#fff;
+}
+
+.taeon-empty-block{
+    margin-top:10px;
+    padding:18px;
+    border:1px dashed #cbd5e1;
+    border-radius:9px;
+    background:#f8fafc;
+    color:#64748b;
+    text-align:center;
+    font-size:12px;
+}
+
+.taeon-system-box{
+    margin-top:10px;
+    overflow:hidden;
+}
+
+.taeon-system-box>summary{
+    cursor:pointer;
+    padding:9px 11px;
+    background:#f8fafc;
+    border-bottom:1px solid #e5e7eb;
+    font-size:12px;
+    font-weight:700;
+}
+
+.taeon-system-box>div{
+    padding:8px;
+}
+
+.taeon-side-card h3{
+    font-size:12px;
+    margin:0 0 8px;
+}
+
+.taeon-side-card label{
+    display:block;
+    font-size:10px;
+    color:#475569;
+    margin-top:7px;
+}
+
+.taeon-side-card input,
+.taeon-side-card textarea,
+.taeon-side-card select{
+    width:100%;
+    box-sizing:border-box;
+    border:1px solid #dbe2ea;
+    border-radius:6px;
+    padding:7px 8px;
+    font-size:11px;
+    background:#fff;
+}
+
+.taeon-side-card textarea{
+    min-height:82px;
+    resize:vertical;
+}
+
+.taeon-side-actions{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    margin-top:7px;
+}
+
+.taeon-side-actions span{
+    font-size:10px;
+    color:#059669;
+}
+
+.taeon-code-editor-wrap{
+    display:grid;
+    gap:6px;
+    margin-top:8px;
+}
+
+.taeon-code-editor-wrap textarea{
+    min-height:260px;
+    font-family:Consolas,monospace;
+    font-size:10px;
+    line-height:1.45;
+}
+
+.taeon-code-editor-wrap small{
+    color:#64748b;
+    font-size:9px;
+}
+
+.taeon-code-card #taeonCodeLock{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:5px;
+}
+
+.taeon-code-card #taeonCodeLock.unlocked{
+    opacity:.55;
+}
+
+
+/* 자동판독 박스 압축 */
+
+.taeon-workspace-main>.intake-panel{
+    margin:0!important;
+    padding:10px!important;
+    border-radius:10px!important;
+}
+
+.taeon-workspace-main .intake-head{
+    margin-bottom:7px!important;
+}
+
+.taeon-workspace-main .intake-body{
+    gap:8px!important;
+}
+
+.taeon-workspace-main .intake-drop{
+    min-height:112px!important;
+    padding:10px!important;
+}
+
+.taeon-workspace-main .intake-drop strong{
+    font-size:12px!important;
+}
+
+.taeon-workspace-main .intake-drop small{
+    font-size:10px!important;
+    line-height:1.4!important;
+}
+
+.taeon-workspace-main .intake-text textarea{
+    min-height:92px!important;
+    max-height:120px!important;
+}
+
+.taeon-workspace-main .intake-buttons{
+    margin-top:6px!important;
+    gap:5px!important;
+}
+
+.taeon-workspace-main .intake-buttons .btn{
+    padding:6px 9px!important;
+    font-size:11px!important;
+}
+
+.taeon-workspace-main .intake-preview{
+    margin-top:8px!important;
+    padding:8px!important;
+    max-height:250px;
+    overflow:auto;
+}
+
+.taeon-workspace-main .intake-field-grid{
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(0,1fr)
+        )!important;
+
+    gap:5px!important;
+}
+
+.taeon-workspace-main .intake-field{
+    padding:5px 6px!important;
+}
+
+.taeon-workspace-main .intake-field-label{
+    font-size:9px!important;
+}
+
+.taeon-workspace-main .intake-field-value{
+    font-size:10px!important;
+}
+
+
+/* 기존 업무등록 / 문서등록 압축 */
+
+.taeon-system-box .two-column{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:8px!important;
+    margin:0!important;
+}
+
+.taeon-system-box .panel{
+    padding:10px!important;
+    margin:0!important;
+}
+
+.taeon-system-box .panel h2{
+    font-size:13px!important;
+    margin:0 0 8px!important;
+}
+
+.taeon-system-box .form-grid{
+    gap:7px!important;
+}
+
+.taeon-system-box .form-group label{
+    font-size:10px!important;
+}
+
+.taeon-system-box input,
+.taeon-system-box textarea,
+.taeon-system-box select{
+    font-size:11px!important;
+    padding:7px!important;
+}
+
+.taeon-system-box textarea{
+    min-height:70px!important;
+}
+
+.taeon-system-box .event-item{
+    padding:9px!important;
+}
+
+.taeon-system-box .event-title{
+    font-size:12px!important;
+}
+
+.taeon-system-box .event-meta,
+.taeon-system-box .event-content{
+    font-size:10px!important;
+}
+
+.taeon-system-box .search-row{
+    gap:6px!important;
+}
+
+.taeon-system-box .actions{
+    margin-top:6px!important;
+}
+
+.taeon-system-box .btn{
+    padding:6px 8px!important;
+    font-size:10px!important;
+}
+
+
+@media(max-width:1180px){
+
+    .taeon-workspace-shell{
+        grid-template-columns:1fr;
+    }
+
+    .taeon-workspace-side{
+        position:static;
+
+        display:grid;
+
+        grid-template-columns:
+            repeat(
+                3,
+                minmax(0,1fr)
+            );
+    }
+
+    .taeon-code-editor-wrap textarea{
+        min-height:180px;
+    }
+}
+
+
+@media(max-width:760px){
+
+    .taeon-workspace-side{
+        grid-template-columns:1fr;
+    }
+
+    .taeon-data-grid{
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0,1fr)
+            );
+    }
+
+    .taeon-system-box .two-column{
+        grid-template-columns:
+            1fr!important;
+    }
+}
