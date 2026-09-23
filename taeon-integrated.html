@@ -250,6 +250,22 @@ details.advanced-code[open]>summary{border-bottom:1px solid #e2e7ec}
 @media(max-width:1250px){.toc-group.task-group{min-width:0}.legend{margin-left:0}.topbar{grid-template-columns:1fr}.top-center{order:3}}
 @media(max-width:1100px){.workspace{grid-template-columns:1fr}.status-grid{grid-template-columns:1fr 1fr}.settings-grid{grid-template-columns:1fr 1fr}.task-list-wrap{grid-template-columns:1fr}.popup-grid{grid-template-columns:1fr}}
 @media(max-width:760px){.app{grid-template-columns:1fr}.sidebar{display:none}.tocbar{align-items:stretch}.toc-group{width:100%}.status-grid,.settings-grid,.editor-meta{grid-template-columns:1fr}}
+
+/* V15: the drop zone belongs to fixed API input; the selected/saved list belongs only to related materials. */
+.document-drop{display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;gap:5px;min-height:115px;margin-bottom:8px;padding:12px 5px;border:2px dashed #d6b448;border-radius:8px;background:#fffbea;cursor:pointer;outline-offset:3px}
+.document-drop.drag-over,.document-drop:focus-visible{background:#ffefac;border-color:#a67e00}
+.document-drop strong{font-size:12px}.document-drop small{font-size:10px;color:#715d2b}.drop-icon{font-size:21px;line-height:1;color:#aa821b}
+.file-shortcuts{gap:5px}.file-shortcuts .fixed-btn{font-size:11px;padding:6px 2px}
+.selected-file-area{border-top:1px solid #e6d99c;margin-top:8px;padding-top:9px}
+.selected-file-title{font-size:12px;font-weight:700;margin-bottom:5px}
+.file-row{display:flex;gap:6px;align-items:center;padding:7px 0;border-bottom:1px solid #e6dec5;min-width:0}
+.file-name{flex:1;min-width:0;overflow-wrap:anywhere;font-size:11px}.file-state{font-size:10px;color:#697586;white-space:nowrap}
+.file-row button{border:1px solid #d6c98d;background:white;border-radius:5px;min-width:25px;padding:3px 5px;font-size:11px}
+.file-row button:focus-visible{outline:2px solid #2f6fed}.file-row a{font-size:10px;color:#215fcb;text-decoration:underline}
+.files-actions{gap:5px}.files-actions .action-btn{font-size:11px;padding:6px}
+.file-save-result{font-size:10px;margin-top:7px;line-height:1.5;color:#7b6718;overflow-wrap:anywhere}
+.file-save-result.error{color:#a22b20}.file-save-result.ok{color:#2f7136}
+
 </style>
 </head>
 <body>
@@ -312,10 +328,37 @@ details.advanced-code[open]>summary{border-bottom:1px solid #e2e7ec}
       <aside class="side-stack">
         <div class="fixed-panel">
           <div class="panel-head"><div class="panel-title">업무 API / 자료입력</div><span class="badge badge-fixed">고정 시스템</span></div>
-          <div class="panel-body"><div class="fixed-btn-grid"><button class="fixed-btn" id="pdfBtn">PDF / 문서</button><button class="fixed-btn" id="excelBtn">Excel</button><button class="fixed-btn" id="imageBtn">이미지</button><button class="fixed-btn" id="textBtn">텍스트</button></div><input type="file" id="fileInput" hidden></div>
+          <div class="panel-body">
+              <div id="documentDrop" class="document-drop" role="button" tabindex="0" aria-label="파일 끌어놓기 또는 여러 파일 선택">
+                <span class="drop-icon" aria-hidden="true">⇧</span>
+                <strong>파일을 끌어다 놓으세요</strong>
+                <small>PDF · Excel · 이미지 · 문서 동시 등록</small>
+                <small>클릭하여 여러 파일 선택</small>
+              </div>
+              <div class="fixed-btn-grid file-shortcuts">
+                <button class="fixed-btn" id="pdfBtn">PDF / 문서</button>
+                <button class="fixed-btn" id="excelBtn">Excel</button>
+                <button class="fixed-btn" id="imageBtn">이미지</button>
+                <button class="fixed-btn" id="textBtn">텍스트</button>
+              </div>
+              <input type="file" id="fileInput" multiple hidden accept=".pdf,.xls,.xlsx,.csv,.jpg,.jpeg,.png,.webp,.gif,.doc,.docx,.hwp,.hwpx,.txt,.md">
+            </div>
         </div>
         <div class="fixed-card"><h4>업무 처리방법</h4><ol class="simple-list" id="manualList"><li>선택 업무의 매뉴얼이 표시됩니다.</li></ol></div>
-        <div class="fixed-card"><h4>관련자료</h4><div id="relatedData">현재 연결자료 없음</div></div>
+        <div class="fixed-card" id="relatedDocumentsCard">
+          <h4>관련자료</h4>
+          <div id="relatedData">현재 연결자료 없음</div>
+          <div id="selectedFileArea" class="selected-file-area" hidden>
+            <div class="selected-file-title">선택된 파일 <span id="selectedFileCount"></span></div>
+            <div id="selectedFileList" class="file-list"></div>
+            <div class="action-row files-actions">
+              <button class="action-btn primary" id="registerFilesBtn">선택파일 저장·등록</button>
+              <button class="action-btn" id="clearSelectedFilesBtn">선택 초기화</button>
+            </div>
+          </div>
+          <div id="fileSaveResult" class="file-save-result" aria-live="polite">파일을 선택하면 이곳에서 확인 후 등록합니다.</div>
+          <div id="registeredFileList" class="file-list"></div>
+        </div>
         <div class="fixed-card"><h4>관련링크</h4><div class="link-list" id="relatedLinks"><span style="color:#687385">현재 등록링크 없음</span></div></div>
         <div class="fixed-card">
           <h4>업무메모</h4>
@@ -603,7 +646,8 @@ function renderManualResourcesLinks(task){
   manual.innerHTML=lines.length?lines.map(x=>`<li>${escapeHtml(x)}</li>`).join(""):"<li>등록된 업무 매뉴얼이 없습니다.</li>";
 
   const resources=String(task?.resources||"").split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
-  $("relatedData").innerHTML=resources.length?resources.map(x=>`<div>${escapeHtml(x)}</div>`).join(""):"현재 연결자료 없음";
+  $("relatedData").innerHTML=resources.length?resources.map(x=>`<div>${escapeHtml(x)}</div>`).join(""):"관리자 지정 관련자료 없음";
+  refreshRegisteredFiles();
 
   const links=String(task?.links||"").split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
   $("relatedLinks").innerHTML=links.length?links.map(line=>{
@@ -751,6 +795,9 @@ function collectPopupEditor(){
   return arr;
 }
 function selectTask(id){
+  if(currentTaskId && currentTaskId!==id && queuedFiles.length){
+    queuedFiles.splice(0);renderQueuedFiles();fileMessage("업무 변경으로 미등록 선택파일을 초기화했습니다.");
+  }
   currentTaskId=id;const task=currentTask();
   renderTaskChips();renderTaskManagerList();fillTaskEditor(task);renderManualResourcesLinks(task);renderWork(task);
   $("workMemo").value=localStorage.getItem(PREFIX+"memo."+id)||"";
@@ -884,13 +931,174 @@ $("saveMemo").addEventListener("click",()=>{
 });
 $("resetMemo").addEventListener("click",()=>{if(!currentTaskId)return;localStorage.removeItem(PREFIX+"memo."+currentTaskId);$("workMemo").value="";$("memoSaved").classList.remove("show")});
 
-/* input test */
-function chooseFile(accept){const input=$("fileInput");input.accept=accept;input.value="";input.click()}
+/* V15 multiple-file workflow: choose/drop -> related materials -> local IndexedDB registration.
+   Remote API path intentionally OFF until its upload response/contract is verified.
+   A browser-local registration must never be displayed as shared server registration. */
+const queuedFiles=[];
+const DB_NAME="TAEON_V15_DOCUMENTS";
+const DB_STORE="files";
+let fileSaving=false;
+let fileRefreshToken=0;
+function fileDb(){
+  return new Promise((resolve,reject)=>{
+    if(!window.indexedDB){reject(new Error("이 브라우저는 파일 저장을 지원하지 않습니다."));return;}
+    const req=indexedDB.open(DB_NAME,1);
+    req.onupgradeneeded=()=>{
+      const db=req.result;
+      if(!db.objectStoreNames.contains(DB_STORE)){
+        const store=db.createObjectStore(DB_STORE,{keyPath:"id"});
+        store.createIndex("work_task",["work","taskId"],{unique:false});
+      }
+    };
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error||new Error("파일 저장소를 열 수 없습니다."));
+  });
+}
+async function addLocalFile(file,taskId){
+  const db=await fileDb();
+  const entry={
+    id:(window.crypto?.randomUUID?.() || "DOC-"+Date.now()+"-"+Math.random().toString(36).slice(2)),
+    work:WORK,taskId,name:file.name,size:file.size,type:file.type,
+    savedAt:new Date().toISOString(),blob:file
+  };
+  try {
+    await new Promise((resolve,reject)=>{
+      const tx=db.transaction(DB_STORE,"readwrite");
+      tx.objectStore(DB_STORE).put(entry);
+      tx.oncomplete=resolve;
+      tx.onabort=()=>reject(tx.error||new Error("브라우저 저장이 중단됐습니다."));
+      tx.onerror=()=>reject(tx.error||new Error("브라우저 저장이 실패했습니다."));
+    });
+  }finally{db.close();}
+  return entry;
+}
+async function listLocalFiles(taskId){
+  const db=await fileDb();
+  try{
+    return await new Promise((resolve,reject)=>{
+      const tx=db.transaction(DB_STORE,"readonly");
+      const req=tx.objectStore(DB_STORE).index("work_task").getAll([WORK,taskId]);
+      req.onsuccess=()=>resolve(req.result||[]);
+      req.onerror=()=>reject(req.error||new Error("파일 목록 조회 실패"));
+    });
+  }finally{db.close();}
+}
+async function getLocalFile(id){
+  const db=await fileDb();
+  try{
+    return await new Promise((resolve,reject)=>{
+      const req=db.transaction(DB_STORE,"readonly").objectStore(DB_STORE).get(id);
+      req.onsuccess=()=>resolve(req.result);
+      req.onerror=()=>reject(req.error||new Error("자료 열기 실패"));
+    });
+  }finally{db.close();}
+}
+async function removeLocalFile(id){
+  const db=await fileDb();
+  try{
+    await new Promise((resolve,reject)=>{
+      const tx=db.transaction(DB_STORE,"readwrite");
+      tx.objectStore(DB_STORE).delete(id);
+      tx.oncomplete=resolve;
+      tx.onerror=()=>reject(tx.error||new Error("자료 삭제 실패"));
+    });
+  }finally{db.close();}
+}
+function fileMessage(message,kind=""){
+  const el=$("fileSaveResult");el.textContent=message;el.className="file-save-result "+kind;
+}
+function stageFiles(files){
+  const allowed=/\.(pdf|xls|xlsx|csv|jpe?g|png|webp|gif|docx?|hwp|hwpx|txt|md)$/i;
+  let rejected=0,added=0;
+  for(const file of Array.from(files||[])){
+    if(!file || !allowed.test(file.name)){rejected++;continue;}
+    if(file.size>35*1024*1024){rejected++;continue;}
+    if(queuedFiles.some(x=>x.file.name===file.name&&x.file.size===file.size&&x.file.lastModified===file.lastModified))continue;
+    queuedFiles.push({id:Math.random().toString(36).slice(2),file,taskId:currentTaskId});added++;
+  }
+  renderQueuedFiles();
+  fileMessage(`${added}개 선택${rejected?`, ${rejected}개 제외(형식 또는 35MB 초과)`:""}. 저장 전에는 파일이 등록되지 않습니다.`);
+}
+function renderQueuedFiles(){
+  const box=$("selectedFileList");box.replaceChildren();
+  $("selectedFileArea").hidden=queuedFiles.length===0;
+  $("selectedFileCount").textContent=`${queuedFiles.length}개`;
+  for(const entry of queuedFiles){
+    const row=document.createElement("div");row.className="file-row";
+    const name=document.createElement("span");name.className="file-name";name.textContent=entry.file.name;
+    const state=document.createElement("span");state.className="file-state";state.textContent="선택됨";
+    const del=document.createElement("button");del.type="button";del.title="선택 취소";del.textContent="×";
+    del.disabled=fileSaving;
+    del.addEventListener("click",()=>{const i=queuedFiles.findIndex(x=>x.id===entry.id);if(i>=0)queuedFiles.splice(i,1);renderQueuedFiles()});
+    row.append(name,state,del);box.appendChild(row);
+  }
+}
+async function refreshRegisteredFiles(){
+  const token=++fileRefreshToken;
+  const taskId=currentTaskId;
+  const box=$("registeredFileList");box.replaceChildren();
+  if(!taskId)return;
+  try{
+    const entries=await listLocalFiles(taskId);
+    if(token!==fileRefreshToken||taskId!==currentTaskId)return;
+    for(const entry of entries.sort((a,b)=>b.savedAt.localeCompare(a.savedAt))){
+      const row=document.createElement("div");row.className="file-row";
+      const name=document.createElement("span");name.className="file-name";name.textContent=entry.name;
+      const state=document.createElement("span");state.className="file-state";state.textContent="이 브라우저에 저장";
+      const open=document.createElement("button");open.type="button";open.textContent="열기";
+      open.addEventListener("click",async()=>{
+        try{
+          const data=await getLocalFile(entry.id);
+          if(!data)throw new Error("파일을 찾을 수 없습니다.");
+          const url=URL.createObjectURL(data.blob);
+          const a=document.createElement("a");a.href=url;a.download=data.name;
+          document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
+        }catch(e){fileMessage(e.message,"error");}
+      });
+      const del=document.createElement("button");del.type="button";del.textContent="×";del.title="이 브라우저에 저장된 파일 삭제";
+      del.addEventListener("click",async()=>{
+        if(!confirm(`${entry.name} 파일을 이 브라우저에서 삭제할까요?`))return;
+        try{await removeLocalFile(entry.id);await refreshRegisteredFiles();fileMessage("브라우저 저장 자료를 삭제했습니다.","ok");}
+        catch(e){fileMessage(e.message,"error");}
+      });
+      row.append(name,state,open,del);box.appendChild(row);
+    }
+  }catch(e){if(token===fileRefreshToken)fileMessage(`브라우저 자료 조회 불가: ${e.message}`,"error");}
+}
+function chooseFile(accept){const input=$("fileInput");input.accept=accept;input.value="";input.click();}
 $("pdfBtn").addEventListener("click",()=>chooseFile(".pdf,.doc,.docx,.hwp,.hwpx"));
 $("excelBtn").addEventListener("click",()=>chooseFile(".xls,.xlsx,.csv"));
 $("imageBtn").addEventListener("click",()=>chooseFile("image/*"));
-$("textBtn").addEventListener("click",()=>{const text=prompt("텍스트를 입력하세요.");if(text!==null)$("relatedData").textContent="텍스트 입력됨 · 실제 API 연결 전 테스트"});
-$("fileInput").addEventListener("change",e=>{const f=e.target.files?.[0];if(f)$("relatedData").textContent=`선택파일: ${f.name} · 실제 API 연결 전 테스트`});
+$("fileInput").addEventListener("change",e=>{stageFiles(e.target.files);e.target.value="";});
+const drop=$("documentDrop");
+drop.addEventListener("click",()=>chooseFile(".pdf,.xls,.xlsx,.csv,.jpg,.jpeg,.png,.webp,.gif,.doc,.docx,.hwp,.hwpx,.txt,.md"));
+drop.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();drop.click();}});
+for(const event of ["dragenter","dragover"]){drop.addEventListener(event,e=>{e.preventDefault();e.stopPropagation();drop.classList.add("drag-over");});}
+for(const event of ["dragleave","drop"]){drop.addEventListener(event,e=>{e.preventDefault();e.stopPropagation();drop.classList.remove("drag-over");});}
+drop.addEventListener("drop",e=>stageFiles(e.dataTransfer.files));
+$("textBtn").addEventListener("click",()=>{
+  const text=prompt("등록할 텍스트를 입력하세요.");
+  if(text===null||!text.trim())return;
+  const blob=new File([text],`업무텍스트_${new Date().toISOString().slice(0,10)}.txt`,{type:"text/plain"});
+  stageFiles([blob]);
+});
+$("clearSelectedFilesBtn").addEventListener("click",()=>{if(fileSaving)return;queuedFiles.splice(0);renderQueuedFiles();fileMessage("파일 선택을 초기화했습니다.");});
+$("registerFilesBtn").addEventListener("click",async()=>{
+  if(fileSaving||!queuedFiles.length)return;
+  if(!currentTaskId){fileMessage("먼저 업무를 선택하세요.","error");return;}
+  fileSaving=true;$("registerFilesBtn").disabled=true;
+  let ok=0,failed=0;
+  // Each file retains the task selected when it was queued. Do not reassign silently.
+  const batch=queuedFiles.splice(0);
+  for(const entry of batch){
+    try{await addLocalFile(entry.file,entry.taskId);ok++;}
+    catch(e){queuedFiles.push(entry);failed++;fileMessage(`${entry.file.name} 저장 실패: ${e.message}`,"error");}
+  }
+  fileSaving=false;$("registerFilesBtn").disabled=false;
+  renderQueuedFiles();await refreshRegisteredFiles();
+  if(ok){addHistory("관련자료",`${ok}개 브라우저 로컬 저장 (${WORK} / ${currentTaskId})`);}
+  fileMessage(`브라우저 저장 ${ok}개${failed?` / 실패 ${failed}개`:""}. 서버 공동등록·자동판독은 아직 연결되지 않았습니다.`,failed?"error":"ok");
+});
 
 /* bottom five */
 const panelInfo={modify:["수정사항","입력 / 저장"],question:["질의사항","입력 / 저장"],check:["점검사항","입력 / 저장"],admin:["관리자 설정","본사 통제"],history:["변경이력","저장 기록"]};
