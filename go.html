@@ -9,6 +9,7 @@
 <script>
 (() => {
   "use strict";
+
   const p = new URLSearchParams(location.search);
   const work = (p.get("work") || "ACCOUNTING").toUpperCase();
 
@@ -23,12 +24,19 @@
     return;
   }
 
-  const valid = new Set([
-    "ACCOUNTING","FIELD","CONTRACT","BID","LOAN",
-    "VEHICLE","REAL_ESTATE","GOV_SUPPORT","ETC"
+  const modules = new Set([
+    "ACCOUNTING",
+    "FIELD",
+    "CONTRACT",
+    "BID",
+    "LOAN",
+    "VEHICLE",
+    "REAL_ESTATE",
+    "GOV_SUPPORT",
+    "ETC"
   ]);
 
-  const target = valid.has(work) ? work : "ACCOUNTING";
+  const target = modules.has(work) ? work : "ACCOUNTING";
   location.replace("taeon-integrated.html?work=" + encodeURIComponent(target));
 })();
 </script>
