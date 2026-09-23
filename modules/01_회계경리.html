@@ -1,676 +1,177 @@
 <!DOCTYPE html>
-
 <html lang="ko">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        01_회계경리 | TAEON V2
-    </title>
-
-    <link
-        rel="stylesheet"
-        href="../css/module.css"
-    >
-
-    <link rel="stylesheet" href="../css/intake.css">
-    <link rel="stylesheet" href="../css/workspace-builder.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>01 회계경리 | TAEON V2</title>
+<link rel="stylesheet" href="../css/practical-shell.css">
 </head>
-
 <body>
+<div class="app">
 
+  <aside class="sidebar">
+    <div class="logo">TAEON V2<small>태온종합건설 통합관리</small></div>
 
-<div class="layout">
+    <div class="menu-group">업무 모듈</div>
+    <a class="menu-item active" href="./01_회계경리.html">01 회계경리</a>
+    <a class="menu-item" href="./02_현장관리.html">02 현장관리</a>
+    <a class="menu-item" href="./03_계약법무.html">03 계약법무</a>
+    <a class="menu-item" href="./04_입찰.html">04 입찰</a>
+    <a class="menu-item" href="./05_대출금융.html">05 대출금융</a>
+    <a class="menu-item" href="./06_차량.html">06 차량</a>
+    <a class="menu-item" href="./07_토지부동산.html">07 토지부동산</a>
+    <a class="menu-item" href="./08_정부지원행정.html">08 정부지원행정</a>
+    <a class="menu-item" href="./09_기타자료.html">09 기타자료</a>
 
+    <div class="menu-group">관리</div>
+    <a class="menu-item" href="../journal.html">업무일지</a>
+    <a class="menu-item" href="../followups.html">일정·후속조치</a>
+    <a class="menu-item" href="../">통합 대시보드</a>
+  </aside>
 
-    <aside class="sidebar">
+  <main class="main">
 
-        <div class="brand-title">
-            TAEON V2
-        </div>
+    <header class="topbar">
+      <div class="title">태온 V2 <small>01 회계경리</small></div>
+      <div class="actions">
+        <button class="btn" id="newRequestBtn">신규 업무 추가 요청</button>
+        <button class="btn" id="changeRequestBtn">기존 업무 변경 요청</button>
+        <button class="btn" id="emailRequestBtn">이메일 업무접수</button>
+        <button class="btn api" id="waveBtn">WAVE / API</button>
+        <button class="btn bell">🔔 요청<span class="badge">3</span></button>
+      </div>
+    </header>
 
-        <div class="brand-sub">
-            태온종합건설 통합관리
-        </div>
+    <div class="workbar">
+      <div class="group">
+        <span class="group-label">정기지급</span>
+        <button class="chip selected" data-date="10">10일</button>
+        <button class="chip" data-date="15">15일</button>
+        <button class="chip" data-date="23">23일</button>
+        <button class="chip" data-date="말일">말일</button>
+        <button class="chip" data-date="수시">수시</button>
+      </div>
 
+      <div class="divider"></div>
 
-        <a
-            class="back-dashboard"
-            href="../index.html"
-        >
-            ← 통합 대시보드
-        </a>
-        <div class="side-quick-menu">
-
-            <a
-                class="side-utility"
-                href="../journal.html"
-            >
-                업무일지
-            </a>
-
-            <a
-                class="side-utility"
-                href="../followups.html"
-            >
-                일정 · 후속조치
-            </a>
-
-        </div>
-
-
-        <div class="side-title">
-            회계경리 기능
-        </div>
-
-
-        <div
-            id="featureNav"
-            class="feature-nav"
-        >
-        </div>
-
-    </aside>
-
-
-
-    <main class="main">
-
-
-        <header class="topbar">
-
-            <div>
-
-                <h1 id="moduleTitle">
-                    01_회계경리
-                </h1>
-
-                <div
-                    id="moduleSubtitle"
-                    class="subtitle"
-                >
-                </div>
-
-            </div>
-
-
-            <div
-                id="apiStatus"
-                class="status"
-            >
-                연결 확인중...
-            </div>
-
-        </header>
-
-
-
-        <section
-            id="featureGrid"
-            class="feature-grid"
-        >
-        </section>
-
-
-
-        <section class="panel">
-
-            <strong>
-                현재 선택 업무 :
-            </strong>
-
-            <span id="selectedFeature">
-            </span>
-
-            &nbsp;&nbsp;|&nbsp;&nbsp;
-
-            전체
-            <strong id="moduleEventCount">
-                0
-            </strong>
-
-            건 /
-
-            미완료
-            <strong id="moduleOpenCount">
-                0
-            </strong>
-
-            건 /
-
-            완료
-            <strong id="moduleDoneCount">
-                0
-            </strong>
-
-            건
-
-        </section>
-
-
-
-        <section class="intake-panel">
-
-    <div class="intake-head">
-
-        <div class="intake-title">
-            자료 입력 · 자동판독
-        </div>
-
-        <div class="intake-target">
-            파일 / PDF / Excel / TXT / 텍스트 붙여넣기
-        </div>
-
+      <div class="group">
+        <span class="group-label">세부구분</span>
+        <button class="chip" data-task="expense">지출결의</button>
+        <button class="chip selected" data-task="payroll">일반급여</button>
+        <button class="chip" data-task="daily">일용직</button>
+        <button class="chip" data-task="cards">카드</button>
+        <button class="chip" data-task="fixed">고정지출</button>
+        <button class="chip" data-task="vendor">업체정산</button>
+        <button class="chip" data-task="transactions">입출금</button>
+        <button class="chip" data-task="balance">계좌잔액</button>
+        <button class="chip" data-task="taxinvoice">세금계산서</button>
+      </div>
     </div>
 
+    <section class="body">
 
-    <div class="intake-body">
-
-
-        <div
-            id="intakeDrop"
-            class="intake-drop"
-        >
-
-            <strong>
-                파일을 여기에 끌어다 놓으세요
-            </strong>
-
-            <small>
-                PDF · Excel · CSV · TXT · JSON 등<br>
-                또는 파일 선택 버튼 사용
-            </small>
-
-
-            <div
-                id="intakeFileName"
-                class="intake-file-name"
-            >
-                선택된 파일 없음
+      <section class="center-panel">
+        <div class="center-head">
+          <strong>개별 업무 HTML 전용공간</strong>
+          <span id="centerContext">10일 · 일반급여</span>
+        </div>
+        <div class="work-frame-wrap">
+          <div id="emptyResult" class="empty-result" style="display:none">
+            <div class="empty-card">
+              <b>선택한 업무 결과가 이곳에 표시됩니다.</b>
+              <span>공통화면은 고정하고 실제 업무 HTML만 중앙에서 교체합니다.</span>
             </div>
+          </div>
+          <iframe id="workFrame" title="개별 업무 HTML"></iframe>
+        </div>
+      </section>
 
+      <aside class="side">
 
-            <input
-                id="intakeFile"
-                type="file"
-                hidden
-            >
-
-
-            <div class="intake-buttons">
-
-                <button
-                    id="chooseFileBtn"
-                    class="btn"
-                    type="button"
-                >
-                    파일 선택
-                </button>
-
-                <button
-                    id="previewFileBtn"
-                    class="btn primary"
-                    type="button"
-                >
-                    파일 자동판독
-                </button>
-
-            </div>
-
+        <div class="card api-card">
+          <h4>업무 API / 자료입력 <span class="api-state">고정 시스템 영역</span></h4>
+          <div class="btn-row">
+            <button id="filePdf">PDF / 문서</button>
+            <button id="fileExcel">Excel</button>
+            <button id="fileImage">이미지</button>
+            <button id="fileText">텍스트</button>
+            <button id="autoClassify" class="api-run">자동판독 결과로 업무분류</button>
+          </div>
+          <div class="status-box" id="apiStatus">API 상태 확인 중...</div>
+          <input type="file" id="fileInput" hidden>
         </div>
 
-
-
-        <div class="intake-text">
-
-            <textarea
-                id="intakeText"
-                placeholder="카톡, 이메일, 메모, 계좌잔액 등 텍스트를 여기에 붙여넣으세요."
-            ></textarea>
-
-
-            <div class="intake-buttons">
-
-                <button
-                    id="clipboardBtn"
-                    class="btn"
-                    type="button"
-                >
-                    클립보드 가져오기
-                </button>
-
-                <button
-                    id="previewTextBtn"
-                    class="btn primary"
-                    type="button"
-                >
-                    텍스트 자동판독
-                </button>
-
-            </div>
-
+        <div class="card">
+          <h4>업무 처리방법</h4>
+          <ol class="steps" id="guideList"></ol>
         </div>
 
-    </div>
-
-
-    <div
-        id="intakePreview"
-        class="intake-preview"
-    >
-
-        <div class="intake-preview-grid">
-
-            <div class="intake-preview-label">
-                파일
-            </div>
-
-            <div id="previewFile">
-            </div>
-
-
-            <div class="intake-preview-label">
-                형식
-            </div>
-
-            <div id="previewType">
-            </div>
-
-
-            <div class="intake-preview-label">
-                추출문자
-            </div>
-
-            <div id="previewLength">
-            </div>
-
-
-            <div class="intake-preview-label">
-                적용대상
-            </div>
-
-            <div id="previewTarget">
-            </div>
-
+        <div class="card">
+          <h4>관련자료</h4>
+          <ul class="list" id="relatedData">
+            <li>현재 연결자료 없음</li>
+          </ul>
         </div>
 
+        <div class="card">
+          <h4>관련링크</h4>
+          <ul class="list" id="linkList"></ul>
+        </div>
 
-        
-<div
-    id="intakeStructuredFields"
-    class="intake-fields"
->
+        <div class="card">
+          <h4>업무메모</h4>
+          <textarea class="memo" id="memo" placeholder="담당자가 필요한 메모만 입력"></textarea>
+        </div>
+
+      </aside>
+    </section>
+
+    <footer class="bottom">
+      <details>
+        <summary>시스템 상세 / 점검 / 질의 / 설정 / 변경이력 (클릭하여 펼치기)</summary>
+        <div class="bottom-grid">
+          <div class="bottom-box">
+            <h5>수정사항</h5>
+            <p id="requestLog">현재 요청 없음</p>
+          </div>
+          <div class="bottom-box">
+            <h5>질의사항</h5>
+            <p>업무 처리 중 확인이 필요한 질문을 요청으로 접수</p>
+          </div>
+          <div class="bottom-box">
+            <h5>점검사항</h5>
+            <p id="systemCheck">API 상태 확인 중</p>
+          </div>
+          <div class="bottom-box">
+            <h5>관리자 설정</h5>
+            <p>메뉴·표시·업무 정의는 관리자 영역에서 변경</p>
+          </div>
+          <div class="bottom-box">
+            <h5>변경이력</h5>
+            <p>요청·수정·반영·버전 로그를 중앙 서버에 누적</p>
+          </div>
+        </div>
+      </details>
+    </footer>
+
+  </main>
 </div>
 
-<div
-            id="previewText"
-            class="intake-preview-text"
-        >
-        </div>
-
-
-        <div class="intake-buttons">
-
-            <button
-                id="applyIntakeBtn"
-                class="btn primary"
-                type="button"
-            >
-                현재 업무에 적용
-            </button>
-
-<span
-    id="intakeStatusBadge"
-    class="intake-status-badge waiting"
->
-    판독 대기
-</span>
-
-<button
-    id="newIntakeBtn"
-    class="btn intake-new-button"
-    type="button"
->
-    새 자료 입력
-</button>
-
-        </div>
-
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal">
+    <h3 id="modalTitle">요청</h3>
+    <input type="hidden" id="requestKind">
+    <label for="requestText">내용</label>
+    <textarea id="requestText" placeholder="정리하지 않아도 됩니다. 필요한 내용을 그대로 입력하세요."></textarea>
+    <div class="modal-actions">
+      <button class="btn" id="modalClose">취소</button>
+      <button class="btn primary" id="modalSubmit">등록</button>
     </div>
-
-
-    <div
-        id="intakeResult"
-        class="intake-result"
-    >
-    </div>
-
-</section>
-
-<section class="two-column">
-
-
-            <!-- 업무등록 -->
-
-            <div class="panel">
-
-                <h2>
-                    업무 등록
-                </h2>
-
-
-                <div class="form-grid">
-
-
-                    <div class="form-group full">
-
-                        <label>
-                            업무 제목
-                        </label>
-
-                        <input
-                            id="eventTitle"
-                            type="text"
-                            placeholder="업무 제목 입력"
-                        >
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label>
-                            회사
-                        </label>
-
-                        <input
-                            id="eventCompany"
-                            type="text"
-                            value="주식회사 태온종합건설"
-                        >
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label>
-                            현장 / 관련장소
-                        </label>
-
-                        <input
-                            id="eventSite"
-                            type="text"
-                            placeholder="예: 공릉복지관"
-                        >
-
-                    </div>
-
-
-                    <div class="form-group full">
-
-                        <label>
-                            담당 / 관련자
-                        </label>
-
-                        <input
-                            id="eventPeople"
-                            type="text"
-                            placeholder="여러 명이면 쉼표로 구분"
-                        >
-
-                    </div>
-
-
-                    <div class="form-group full">
-
-                        <label>
-                            업무 내용
-                        </label>
-
-                        <textarea
-                            id="eventContent"
-                            placeholder="업무내용, 진행사항, 메모"
-                        ></textarea>
-
-                    </div>
-
-
-                    <div class="form-group full">
-
-                        <label>
-                            후속조치 예정일
-                        </label>
-
-                        <input
-                            id="followUpDate"
-                            type="datetime-local"
-                        >
-
-                    </div>
-
-                </div>
-
-
-                <div class="actions">
-
-                    <button
-                        id="createEventBtn"
-                        class="btn primary"
-                    >
-                        업무 등록
-                    </button>
-
-                </div>
-
-
-                <div
-                    id="eventMessage"
-                    class="message"
-                >
-                </div>
-
-            </div>
-
-
-
-            <!-- 문서등록 -->
-
-            <div class="panel">
-
-                <h2>
-                    문서 등록
-                </h2>
-
-
-                <div class="form-grid">
-
-
-                    <div class="form-group full">
-
-                        <label>
-                            파일 전체경로
-                        </label>
-
-                        <input
-                            id="documentPath"
-                            type="text"
-                            placeholder="예: D:\자료\계약서.pdf"
-                        >
-
-                    </div>
-
-
-                    <div class="form-group full">
-
-                        <label>
-                            문서 제목
-                        </label>
-
-                        <input
-                            id="documentTitle"
-                            type="text"
-                            placeholder="문서 제목"
-                        >
-
-                    </div>
-
-
-                    <div class="form-group full">
-
-                        <label>
-                            메모
-                        </label>
-
-                        <textarea
-                            id="documentMemo"
-                            placeholder="문서 관련 메모"
-                        ></textarea>
-
-                    </div>
-
-                </div>
-
-
-                <div class="actions">
-
-                    <button
-                        id="registerDocumentBtn"
-                        class="btn primary"
-                    >
-                        문서 등록
-                    </button>
-
-                </div>
-
-
-                <div
-                    id="documentMessage"
-                    class="message"
-                >
-                </div>
-
-            </div>
-
-
-        </section>
-
-
-
-        <!-- 조회 -->
-
-        <section class="panel">
-
-            <h2>
-                업무이력 조회
-            </h2>
-
-
-            <div class="search-row">
-
-                <input
-                    id="searchKeyword"
-                    type="text"
-                    placeholder="제목·내용·회사·현장·담당자 검색"
-                >
-
-
-                <select id="searchStatus">
-
-                    <option value="">
-                        전체 상태
-                    </option>
-
-                    <option value="OPEN">
-                        미완료
-                    </option>
-
-                    <option value="DONE">
-                        완료
-                    </option>
-
-                </select>
-
-
-                <button
-                    id="searchBtn"
-                    class="btn"
-                >
-                    검색
-                </button>
-
-            </div>
-
-
-            <div class="actions">
-
-                <button
-                    id="reloadBtn"
-                    class="btn"
-                >
-                    새로고침
-                </button>
-
-            </div>
-
-
-            <div
-                id="eventList"
-                class="event-list"
-            >
-
-                <div class="empty">
-                    불러오는 중...
-                </div>
-
-            </div>
-
-        </section>
-
-
-    </main>
-
-
+  </div>
 </div>
 
+<div class="toast" id="toast"></div>
 
-<script>
-
-window.TAEON_MODULE = {
-
-    folder:
-        "01_회계경리",
-
-    code:
-        "ACCOUNTING",
-
-    name:
-        "회계경리",
-
-    features:
-        ["지출결의","입출금","계좌잔액","급여","카드","세금계산서","고정지출"]
-};
-
-</script>
-
-
-<script src="../js/module.js"></script>
-<script src="../js/intake.js"></script>
-
-
-<script src="../js/workspace-builder.js"></script>
-
+<script src="../js/accounting-practical.js"></script>
 </body>
-
 </html>
-
-
-
-
