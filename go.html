@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TAEON V2 ROUTER</title>
+</head>
+<body>
+<script>
+(() => {
+  "use strict";
+  const p = new URLSearchParams(location.search);
+  const work = (p.get("work") || "ACCOUNTING").toUpperCase();
+
+  const direct = {
+    DASHBOARD: "index.html",
+    JOURNAL: "journal.html",
+    FOLLOWUPS: "followups.html"
+  };
+
+  if (direct[work]) {
+    location.replace(direct[work]);
+    return;
+  }
+
+  const valid = new Set([
+    "ACCOUNTING","FIELD","CONTRACT","BID","LOAN",
+    "VEHICLE","REAL_ESTATE","GOV_SUPPORT","ETC"
+  ]);
+
+  const target = valid.has(work) ? work : "ACCOUNTING";
+  location.replace("taeon-integrated.html?work=" + encodeURIComponent(target));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAEON V2 통합형 툴 V13</title>
+<style>
+:root{
+  --bg:#f4f6f8;--panel:#fff;--line:#d9dee7;--text:#18202a;--sub:#687385;
+  --nav:#162238;--nav-active:#253754;
+  --fixed-bg:#fff7d8;--fixed-line:#e2c85a;--fixed-label:#8f6c00;
+  --editable-bg:#eef9ef;--editable-line:#77b47a;--editable-label:#2f7d32;
+  --toc-date-bg:#edf4ff;--toc-date-line:#a9c3f2;--toc-date-text:#244d87;
+  --toc-task-bg:#f1f5f9;--toc-task-line:#b7c3d3;--toc-task-text:#344054;
+  --chip-active:#15213b;--blue:#2f6fed;--success:#15803d;--success-bg:#ecfdf3;--success-line:#a7e0b3;
+  --danger:#b42318;--danger-bg:#fff0ee;
+  --global-font:"Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  --global-size:13px;--left-size:12px;--top-button-size:12px;--date-size:13px;--task-size:13px;--right-title-size:13px;--right-body-size:13px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:var(--global-font);background:var(--bg);color:var(--text)}
+body{font-size:var(--global-size)}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.app{min-height:100vh;display:grid;grid-template-columns:150px minmax(0,1fr)}
+.sidebar{background:var(--nav);color:#fff;padding:18px 0 24px}
+.logo{padding:0 14px 14px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:12px}
+.logo .title{font-size:18px;font-weight:800}.logo .sub{font-size:11px;color:#b9c4d7;margin-top:4px}
+.nav-label{padding:12px 12px 8px;font-size:11px;color:#8fa2c3}
+.nav-item{display:block;width:100%;text-align:left;border:0;background:none;color:#fff;padding:11px 12px;font-size:var(--left-size)}
+.nav-item.active{background:var(--nav-active);font-weight:700}
+.nav-item:hover{background:#21314b}
+
+.main{min-width:0;display:flex;flex-direction:column}
+.topbar{background:#fff;border-bottom:1px solid var(--line);padding:8px 14px;display:grid;grid-template-columns:auto minmax(320px,1fr) auto;align-items:center;gap:12px}
+.top-left{display:flex;align-items:center;gap:10px}.page-title{font-size:15px;font-weight:800}.page-sub{font-size:12px;color:var(--sub)}
+.top-center{min-width:0;display:flex;align-items:center;gap:8px}
+.clock-box{border:1px solid #e4e8ee;background:#fbfcfd;border-radius:8px;padding:7px 10px;font-weight:700;white-space:nowrap;font-size:12px}
+.notice-strip{min-width:0;flex:1;border:1px solid #e4e8ee;background:#fff;border-radius:8px;height:34px;display:flex;align-items:center;overflow:hidden;position:relative}
+.notice-strip .gear{border:0;background:transparent;padding:0 8px;font-size:15px;flex:0 0 auto}
+.notice-track{white-space:nowrap;display:inline-block;padding-left:100%;animation:marquee 18s linear infinite;font-size:12px;color:#475569}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+.top-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.top-btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 10px;font-size:var(--top-button-size)}
+.top-btn.fixed{background:var(--fixed-bg);border-color:var(--fixed-line)}
+
+.tocbar{background:#fff;border-bottom:1px solid var(--line);padding:8px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.toc-group{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:9px;padding:5px 7px 5px 5px;background:#fff}
+.toc-group.date-group{border-color:var(--toc-date-line);background:#fbfdff;font-size:var(--date-size)}
+.toc-group.task-group{border-color:var(--toc-task-line);background:#fcfdff;font-size:var(--task-size);flex:1 1 auto;min-width:440px}
+.toc-label{padding:6px 9px;border-radius:6px;font-size:12px;font-weight:800;white-space:nowrap}
+.date-group .toc-label{background:var(--toc-date-bg);color:var(--toc-date-text);border:1px solid var(--toc-date-line)}
+.task-group .toc-label{background:var(--toc-task-bg);color:var(--toc-task-text);border:1px solid var(--toc-task-line)}
+.chips{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:#fff;border-radius:16px;padding:6px 10px;font-size:inherit;white-space:nowrap}
+.chip.active{background:var(--chip-active);color:#fff;border-color:var(--chip-active);font-weight:700}
+.legend{margin-left:auto;display:flex;align-items:center;gap:8px;padding:5px 7px;border:1px solid #e3e7ed;border-radius:8px;background:#f8fafc;white-space:nowrap}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:#596273}.legend-box{width:12px;height:12px;border-radius:3px;border:1px solid}
+.legend-fixed{background:var(--fixed-bg);border-color:var(--fixed-line)}.legend-edit{background:var(--editable-bg);border-color:var(--editable-line)}.legend-neutral{background:#fff;border-color:#cfd7e3}
+
+.workspace{padding:12px 14px 10px;display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:12px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.panel-head{padding:10px 12px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.panel-title{font-size:13px;font-weight:800}.panel-body{padding:12px}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:700;border:1px solid}
+.badge-fixed{color:var(--fixed-label);background:var(--fixed-bg);border-color:var(--fixed-line)}
+.badge-edit{color:var(--editable-label);background:var(--editable-bg);border-color:var(--editable-line)}
+.editable-area{min-height:560px;background:var(--editable-bg);border:1px solid var(--editable-line);border-radius:12px;padding:20px;overflow:auto}
+.work-placeholder{min-height:520px;display:flex;align-items:center;justify-content:center;text-align:center;color:#47624b}
+.work-placeholder h2{margin:0 0 12px;font-size:24px;color:#244b2a}.work-placeholder p{margin:6px 0;line-height:1.6}
+
+.side-stack{display:flex;flex-direction:column;gap:10px;font-size:var(--right-body-size)}
+.fixed-panel{background:var(--fixed-bg);border:1px solid var(--fixed-line);border-radius:12px;overflow:hidden}
+.fixed-panel .panel-head{border-bottom:1px solid #ecd985;background:rgba(255,255,255,.28);padding:8px 9px}
+.fixed-panel .panel-title{font-size:11px;white-space:nowrap}.fixed-panel .badge{font-size:9px;padding:3px 6px;white-space:nowrap}
+.fixed-card{background:#fffdf1;border:1px solid #ebdb96;border-radius:10px;padding:10px}
+.fixed-card h4{margin:0 0 8px;font-size:var(--right-title-size)}
+.fixed-btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fixed-btn{border:1px solid var(--fixed-line);background:#fff;border-radius:8px;padding:8px 6px;font-size:12px}
+.simple-list{margin:0;padding-left:18px;line-height:1.9}
+.link-list{display:flex;flex-direction:column;gap:6px}.link-list a{color:#215fcb;text-decoration:none}
+.memo-area textarea{width:100%;min-height:135px;border:1px solid #ccd5df;border-radius:8px;padding:8px 10px;resize:vertical}
+
+.action-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px}
+.action-btn{border:1px solid #c8d1dc;background:#fff;border-radius:7px;padding:7px 12px;font-size:12px}
+.action-btn.primary{background:#14213d;border-color:#14213d;color:#fff}
+.action-btn.danger{color:var(--danger);border-color:#efc2bd;background:var(--danger-bg)}
+.save-status{display:none;color:var(--success);background:var(--success-bg);border:1px solid var(--success-line);border-radius:999px;padding:5px 9px;font-size:11px;font-weight:700}
+.save-status.show{display:inline-block}
+
+.bottom-fold{padding:0 14px 16px}
+details.master-fold{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+details.master-fold>summary{cursor:pointer;list-style:none;padding:10px 12px;font-size:13px;font-weight:700;user-select:none}
+details.master-fold>summary::-webkit-details-marker{display:none}
+details.master-fold>summary:before{content:"▶ ";font-size:11px}
+details.master-fold[open]>summary:before{content:"▼ "}
+details.master-fold[open]>summary{border-bottom:1px solid var(--line)}
+.master-content{display:none}
+details.master-fold[open]>.master-content{display:block;padding:12px;background:#fafbfc}
+
+.status-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.status-card{width:100%;min-height:74px;text-align:left;border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px}
+.status-card.active{border-color:var(--blue);box-shadow:0 0 0 2px rgba(47,111,237,.08)}
+.status-card h5{margin:0 0 8px;font-size:13px}.status-card p{margin:0;font-size:12px;color:#5f6b7c;line-height:1.5}
+.detail-panel{margin-top:10px;border:1px solid #cfd7e3;border-radius:10px;background:#fff;overflow:hidden}
+.detail-head{padding:10px 12px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.detail-body{padding:12px}.detail-empty{color:#7a8494;font-size:12px;padding:12px 2px}
+.detail-view textarea,.detail-view input,.detail-view select{width:100%;border:1px solid #ccd5df;border-radius:8px;padding:8px 10px;font-size:13px}
+.detail-view textarea{min-height:105px;resize:vertical}
+
+.settings-panel{border:1px solid #d7dde5;border-radius:10px;background:#fff;padding:12px}
+.settings-title{font-size:13px;font-weight:800;margin-bottom:10px}
+.settings-grid{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:8px}
+.setting label{display:block;font-size:11px;font-weight:700;margin-bottom:4px}
+.setting input,.setting select{width:100%;padding:7px;border:1px solid #d9dee7;border-radius:6px;background:#fff}
+.settings-note{margin-top:8px;font-size:10px;color:#687385;line-height:1.6}
+.history-list{display:flex;flex-direction:column;gap:7px}
+.history-item{border:1px solid #e2e6ec;border-radius:7px;padding:8px 9px;background:#fbfcfd;font-size:12px}
+.history-time{color:#7a8494;font-size:10px;margin-bottom:3px}
+
+details.task-manager{margin-top:10px;border:1px solid var(--editable-line);border-radius:12px;background:var(--editable-bg);overflow:hidden}
+details.task-manager>summary{cursor:pointer;list-style:none;padding:11px 12px;font-size:14px;font-weight:800;color:#2f6034;user-select:none}
+details.task-manager>summary::-webkit-details-marker{display:none}
+details.task-manager>summary:before{content:"▶ ";font-size:11px}
+details.task-manager[open]>summary:before{content:"▼ "}
+details.task-manager[open]>summary{border-bottom:1px solid #b8d7bb}
+.task-manager-body{padding:12px}
+.task-list-wrap{display:grid;grid-template-columns:230px minmax(0,1fr);gap:10px}
+.task-list-panel{background:#fff;border:1px solid #b8d7bb;border-radius:10px;padding:10px}
+.task-list-title{font-size:12px;font-weight:800;color:#2f6034;margin-bottom:8px}
+.task-list{display:flex;flex-direction:column;gap:5px;max-height:350px;overflow:auto}
+.task-row-btn{width:100%;text-align:left;border:1px solid #d8e4d9;background:#fff;border-radius:7px;padding:7px 8px;font-size:12px}
+.task-row-btn.active{background:#e8f6e9;border-color:#84bd87;font-weight:700}
+.task-row-btn.inactive{opacity:.55;text-decoration:line-through}
+.task-editor{background:#fff;border:1px solid #b8d7bb;border-radius:10px;padding:10px}
+.editor-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.editor-meta label{display:block;font-size:11px;font-weight:700;margin-bottom:4px}
+.editor-meta input,.editor-meta select{width:100%;padding:7px;border:1px solid #ccd5df;border-radius:7px;background:#fff}
+.editor-section{border-top:1px solid #e3ece4;padding-top:10px;margin-top:10px}
+.editor-section:first-of-type{border-top:0;margin-top:0;padding-top:0}
+.editor-section h4{margin:0 0 7px;font-size:13px;color:#2f6034}
+.editor-section textarea{width:100%;border:1px solid #ccd5df;border-radius:8px;padding:8px 10px;font-size:13px;resize:vertical}
+
+.dual-editor-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  align-items:stretch;
+  margin-top:10px;
+}
+.dual-editor-row .editor-section{
+  margin-top:0;
+  padding-top:0;
+  border-top:0;
+  display:flex;
+  flex-direction:column;
+}
+.dual-editor-row .editor-section textarea{
+  flex:1;
+  min-height:420px;
+}
+.admin-work-pair{
+  align-items:stretch;
+}
+.html-editor-panel{
+  min-height:520px;
+}
+.html-editor-panel textarea{
+  flex:1;
+  min-height:520px;
+}
+.support-editor-panel{
+  min-height:520px;
+  display:grid;
+  grid-template-rows:1.2fr 1fr 1fr .8fr;
+  gap:10px;
+}
+.support-field{
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+}
+.support-field h4{
+  margin:0 0 7px;
+  font-size:13px;
+  color:#2f6034;
+}
+.support-field textarea{
+  width:100%;
+  flex:1;
+  min-height:0;
+  border:1px solid #ccd5df;
+  border-radius:8px;
+  padding:8px 10px;
+  font-size:13px;
+  resize:vertical;
+}
+
+@media(max-width:1000px){
+  .dual-editor-row{grid-template-columns:1fr;}
+  .html-editor-panel,.support-editor-panel{min-height:auto;}
+  .html-editor-panel textarea{min-height:420px;}
+  .support-editor-panel{grid-template-rows:none;}
+  .support-field textarea{min-height:110px;}
+}
+
+#taskHtml{min-height:420px}
+#taskManual{min-height:0}
+#taskResources{min-height:0}
+#taskLinks{min-height:0}
+#advancedCode{min-height:150px}
+details.advanced-code{margin-top:10px;border:1px solid #dfe5eb;border-radius:8px;background:#fbfcfd;overflow:hidden}
+details.advanced-code>summary{cursor:pointer;list-style:none;padding:9px 10px;font-size:12px;font-weight:700}
+details.advanced-code>summary::-webkit-details-marker{display:none}
+details.advanced-code>summary:before{content:"▶ "}
+details.advanced-code[open]>summary:before{content:"▼ "}
+details.advanced-code[open]>summary{border-bottom:1px solid #e2e7ec}
+.advanced-body{padding:10px}
+
+/* POPUP SETTINGS */
+.popup-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.popup-card{border:1px solid #dfe5eb;border-radius:8px;padding:10px;background:#fbfcfd}
+.popup-card h5{margin:0 0 8px;font-size:12px}
+.popup-card label{display:block;font-size:10px;font-weight:700;margin:6px 0 3px}
+.popup-card input,.popup-card textarea,.popup-card select{width:100%;border:1px solid #cfd8e3;border-radius:6px;padding:6px 7px;font-size:11px}
+.popup-card textarea{min-height:72px;resize:vertical}
+
+/* POPUP */
+.runtime-popup{position:fixed;inset:0;background:rgba(15,23,42,.38);display:none;align-items:center;justify-content:center;z-index:10000}
+.runtime-popup.show{display:flex}
+.runtime-box{width:min(480px,calc(100vw - 30px));background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;box-shadow:0 20px 60px rgba(15,23,42,.22)}
+.runtime-box h3{margin:0 0 10px}.runtime-box p{white-space:pre-wrap;line-height:1.7}.runtime-actions{display:flex;justify-content:flex-end;gap:7px;margin-top:12px}
+
+.modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.42);display:none;align-items:center;justify-content:center;z-index:9999}
+.modal-backdrop.show{display:flex}
+.modal{width:min(520px,calc(100vw - 30px));background:#fff;border-radius:10px;border:1px solid var(--line);padding:16px;box-shadow:0 20px 60px rgba(15,23,42,.22)}
+.modal h3{margin:0 0 12px;font-size:15px}.modal label{display:block;font-size:11px;font-weight:700;margin:8px 0 4px}
+.modal input,.modal select{width:100%;padding:8px;border:1px solid #ccd5df;border-radius:7px}.modal-actions{display:flex;justify-content:flex-end;gap:7px;margin-top:12px}
+
+
+.panel-tools{display:flex;align-items:center;gap:7px}
+.size-btn{border:1px solid #b8d7bb;background:#fff;border-radius:7px;padding:5px 8px;font-size:11px;color:#2f6034}
+.popup-preview{margin-top:7px;border:1px dashed #d0d5dd;border-radius:6px;padding:6px;min-height:38px;background:#fff}
+.popup-preview img{max-width:100%;max-height:100px;display:block;margin:auto}
+.popup-card .type-note{font-size:9px;color:#667085;line-height:1.4;margin-top:4px}
+.screen-size-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.screen-size-grid label{display:block;font-size:11px;font-weight:700;margin-bottom:4px}
+.screen-size-grid input,.screen-size-grid select{width:100%;padding:8px;border:1px solid #ccd5df;border-radius:7px}
+
+@media(max-width:1250px){.toc-group.task-group{min-width:0}.legend{margin-left:0}.topbar{grid-template-columns:1fr}.top-center{order:3}}
+@media(max-width:1100px){.workspace{grid-template-columns:1fr}.status-grid{grid-template-columns:1fr 1fr}.settings-grid{grid-template-columns:1fr 1fr}.task-list-wrap{grid-template-columns:1fr}.popup-grid{grid-template-columns:1fr}}
+@media(max-width:760px){.app{grid-template-columns:1fr}.sidebar{display:none}.tocbar{align-items:stretch}.toc-group{width:100%}.status-grid,.settings-grid,.editor-meta{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo"><div class="title">TAEON V2</div><div class="sub">통합업무관리 플랫폼</div></div>
+    <div class="nav-label">업무 모듈</div>
+    <button class="nav-item" data-work="ACCOUNTING">01 회계경리</button><button class="nav-item" data-work="FIELD">02 현장관리</button><button class="nav-item" data-work="CONTRACT">03 계약법무</button><button class="nav-item" data-work="BID">04 입찰</button><button class="nav-item" data-work="LOAN">05 대출금융</button><button class="nav-item" data-work="VEHICLE">06 차량</button><button class="nav-item" data-work="REAL_ESTATE">07 토지부동산</button><button class="nav-item" data-work="GOV_SUPPORT">08 정부지원행정</button><button class="nav-item" data-work="ETC">09 기타자료</button>
+    <div class="nav-label">관리</div>
+    <button class="nav-item" data-work="JOURNAL">업무일지</button><button class="nav-item" data-work="FOLLOWUPS">일정·후속조치</button><button class="nav-item" id="adminOpenBtn">관리자</button>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="top-left"><div class="page-title">태온 V2</div><div class="page-sub" id="moduleTitle">01 회계경리</div></div>
+      <div class="top-center">
+        <div class="clock-box" id="clockBox">날짜/시간</div>
+        <div class="notice-strip">
+          <button class="gear" id="noticeGear" title="알림 설정">⚙</button>
+          <div class="notice-track" id="noticeTrack">저장된 최근 업무메모와 알림이 이곳에 표시됩니다.</div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="top-btn">신규 업무 추가 요청</button><button class="top-btn">기존 업무 변경 요청</button><button class="top-btn">이메일 업무접수</button><button class="top-btn fixed">WAVE / API</button><button class="top-btn fixed">요청 3</button>
+      </div>
+    </header>
+
+    <section class="tocbar">
+      <div class="toc-group date-group" id="dateGroup">
+        <span class="toc-label">정기지급</span>
+        <div class="chips" id="dateChips"><button class="chip active">10일</button><button class="chip">15일</button><button class="chip">23일</button><button class="chip">말일</button><button class="chip">수시</button></div>
+      </div>
+      <div class="toc-group task-group">
+        <span class="toc-label">세부구분</span>
+        <div class="chips" id="taskChips"></div>
+      </div>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-box legend-fixed"></span>고정 시스템</span>
+        <span class="legend-item"><span class="legend-box legend-edit"></span>HTML 변경</span>
+        <span class="legend-item"><span class="legend-box legend-neutral"></span>공통 선택</span>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <section class="panel">
+        <div class="panel-head">
+          <div class="panel-title">업무 결과 / 처리화면</div>
+          <div class="panel-tools">
+            <button class="size-btn" id="screenSizeBtn">⚙ 화면크기</button>
+            <span class="badge badge-edit" id="workBadge">HTML 변경 가능 영역</span>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="editable-area" id="workContent">
+            <div class="work-placeholder"><div><h2>통합형 공통 툴 메인 작업영역</h2><p>업무를 선택하면 해당 TASK_ID의 HTML이 이 영역에 표시됩니다.</p></div></div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="side-stack">
+        <div class="fixed-panel">
+          <div class="panel-head"><div class="panel-title">업무 API / 자료입력</div><span class="badge badge-fixed">고정 시스템</span></div>
+          <div class="panel-body"><div class="fixed-btn-grid"><button class="fixed-btn" id="pdfBtn">PDF / 문서</button><button class="fixed-btn" id="excelBtn">Excel</button><button class="fixed-btn" id="imageBtn">이미지</button><button class="fixed-btn" id="textBtn">텍스트</button></div><input type="file" id="fileInput" hidden></div>
+        </div>
+        <div class="fixed-card"><h4>업무 처리방법</h4><ol class="simple-list" id="manualList"><li>선택 업무의 매뉴얼이 표시됩니다.</li></ol></div>
+        <div class="fixed-card"><h4>관련자료</h4><div id="relatedData">현재 연결자료 없음</div></div>
+        <div class="fixed-card"><h4>관련링크</h4><div class="link-list" id="relatedLinks"><span style="color:#687385">현재 등록링크 없음</span></div></div>
+        <div class="fixed-card">
+          <h4>업무메모</h4>
+          <div class="memo-area">
+            <textarea id="workMemo" placeholder="현재 업무에 대한 메모를 입력하세요. 저장하면 최근 5일간 상단 알림줄에 표시됩니다."></textarea>
+            <div class="action-row"><button class="action-btn primary" id="saveMemo">저장</button><span class="save-status" id="memoSaved">저장완료</span><button class="action-btn" id="resetMemo">초기화</button></div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <div class="bottom-fold">
+      <details class="master-fold">
+        <summary>시스템 상세 / 점검 / 질의 / 설정 / 변경이력 (클릭하여 펼치기)</summary>
+        <div class="master-content">
+          <div class="status-grid">
+            <button class="status-card" data-panel="modify"><h5>수정사항</h5><p>레이아웃 수정 요청, 버튼 위치 변경, 문구 수정 등</p></button>
+            <button class="status-card" data-panel="question"><h5>질의사항</h5><p>업무 처리 중 문의사항, 확인사항, 검토 요청</p></button>
+            <button class="status-card" data-panel="check"><h5>점검사항</h5><p>API 연결 상태, 문서 판독 결과, 기능 정상 여부 점검</p></button>
+            <button class="status-card" data-panel="admin"><h5>관리자 설정</h5><p>화면설정, 글자크기, 폰트, 본사 통제용 설정값</p></button>
+            <button class="status-card" data-panel="history"><h5>변경이력</h5><p>버전 이력, 요청 반영 내역, 화면 구조 변경 기록</p></button>
+          </div>
+
+          <section class="detail-panel">
+            <div class="detail-head"><strong id="detailTitle">항목 상세</strong><span class="badge badge-edit" id="detailBadge">항목을 선택하세요</span></div>
+            <div class="detail-body">
+              <div class="detail-empty" id="detailEmpty">위 항목을 클릭하면 상세내용이 표시됩니다.</div>
+              <div class="detail-view" id="view-modify" hidden><textarea id="modifyText" placeholder="수정 요청 내용을 입력하세요."></textarea><div class="action-row"><button class="action-btn primary" data-save-field="modifyText" data-label="수정사항">저장</button><span class="save-status" id="saved-modifyText">저장완료</span><button class="action-btn" data-reset-field="modifyText">초기화</button></div></div>
+              <div class="detail-view" id="view-question" hidden><textarea id="questionText" placeholder="질의사항을 입력하세요."></textarea><div class="action-row"><button class="action-btn primary" data-save-field="questionText" data-label="질의사항">저장</button><span class="save-status" id="saved-questionText">저장완료</span><button class="action-btn" data-reset-field="questionText">초기화</button></div></div>
+              <div class="detail-view" id="view-check" hidden><textarea id="checkText" placeholder="점검 결과와 확인사항을 입력하세요."></textarea><div class="action-row"><button class="action-btn primary" data-save-field="checkText" data-label="점검사항">저장</button><span class="save-status" id="saved-checkText">저장완료</span><button class="action-btn" data-reset-field="checkText">초기화</button></div></div>
+
+              <div class="detail-view" id="view-admin" hidden>
+                <section class="settings-panel">
+                  <div class="settings-title">본사 전용 화면설정 · 전체/개별 폰트 및 글자크기</div>
+                  <div class="settings-grid">
+                    <div class="setting"><label>전체 폰트</label><select id="globalFont"><option value='"Malgun Gothic","Apple SD Gothic Neo",sans-serif'>맑은 고딕</option><option value='"Noto Sans KR","Malgun Gothic",sans-serif'>Noto Sans KR</option><option value='Arial,"Malgun Gothic",sans-serif'>Arial</option></select></div>
+                    <div class="setting"><label>전체 기본 크기</label><input id="globalSize" value="13"></div>
+                    <div class="setting"><label>정기지급 글자 크기</label><input id="dateSize" value="13"></div>
+                    <div class="setting"><label>세부구분 글자 크기</label><input id="taskSize" value="13"></div>
+                    <div class="setting"><label>좌측 메뉴 글자 크기</label><input id="leftSize" value="12"></div>
+                    <div class="setting"><label>상단 버튼 글자 크기</label><input id="topBtnSize" value="12"></div>
+                    <div class="setting"><label>우측 제목 글자 크기</label><input id="rightTitleSize" value="13"></div>
+                    <div class="setting"><label>우측 본문 글자 크기</label><input id="rightBodySize" value="13"></div>
+                  </div>
+                  <div class="settings-note">일반 사용자는 변경하지 않고, 사용자 요청을 본사에서 검토한 후 회사 전체 또는 특정 영역만 변경하는 통제형 설정으로 운영합니다.</div>
+                  <div class="action-row"><button class="action-btn primary" id="saveSettings">저장</button><span class="save-status" id="settingsSaved">저장완료</span><button class="action-btn" id="resetSettings">초기화</button></div>
+                </section>
+              </div>
+
+              <div class="detail-view" id="view-history" hidden><div class="history-list" id="historyList"></div><div class="action-row"><button class="action-btn" id="clearHistory">변경이력 초기화</button></div></div>
+            </div>
+          </section>
+
+          <details class="task-manager">
+            <summary>업무 화면 관리 · HTML / 매뉴얼 / 관련자료 / 관련링크 / 알림 (클릭하여 펼치기)</summary>
+            <div class="task-manager-body">
+              <div class="task-list-wrap">
+                <aside class="task-list-panel">
+                  <div class="task-list-title">등록 업무 목록</div>
+                  <div class="task-list" id="taskManagerList"></div>
+                  <div class="action-row"><button class="action-btn primary" id="newTaskBtn">신규업무</button><button class="action-btn danger" id="deleteTaskBtn">삭제</button><button class="action-btn" id="restoreTaskBtn">되돌리기</button></div>
+                  <div class="action-row"><span class="save-status" id="taskActionStatus"></span></div>
+                </aside>
+
+                <section class="task-editor">
+                  <div class="editor-meta">
+                    <div><label>선택 업무명</label><input id="taskName" placeholder="업무명을 입력하세요."></div>
+                    <div><label>고정 TASK_ID</label><input id="taskId" readonly placeholder="자동 생성"></div>
+                    <div><label>목차 구분</label><select id="taskGroup"><option value="세부구분">세부구분</option><option value="정기지급">정기지급</option></select></div>
+                    <div><label>상태</label><input id="taskStatus" readonly></div>
+                  </div>
+
+                  <div class="dual-editor-row admin-work-pair">
+                    <div class="editor-section html-editor-panel">
+                      <h4>1. 업무 화면 HTML</h4>
+                      <textarea id="taskHtml" placeholder="이곳에 중앙 메인 작업영역에 표시할 HTML을 붙여넣으세요. 저장하면 선택한 업무의 화면에 바로 반영됩니다."></textarea>
+                    </div>
+
+                    <div class="support-editor-panel">
+                      <div class="support-field">
+                        <h4>2. 업무 처리방법</h4>
+                        <textarea id="taskManual" placeholder="사용자가 오른쪽에서 보게 될 업무 처리방법을 한 줄에 하나씩 입력하세요. 예: 지급대상 확인&#10;금액·계좌 확인&#10;은행 접속 후 지급"></textarea>
+                      </div>
+
+                      <div class="support-field">
+                        <h4>3. 관련자료</h4>
+                        <textarea id="taskResources" placeholder="사용자가 열거나 다운로드할 관련자료 이름을 한 줄에 하나씩 입력하세요. 예: 급여대장.xlsx&#10;근로계약서.pdf"></textarea>
+                      </div>
+
+                      <div class="support-field">
+                        <h4>4. 관련링크</h4>
+                        <textarea id="taskLinks" placeholder="사용자가 클릭할 링크를 한 줄에 하나씩 입력하세요. 형식: 이름|URL&#10;예: 국민은행|https://obiz.kbstar.com&#10;회사 홈페이지|https://..."></textarea>
+                      </div>
+
+                      <div class="support-field">
+                        <h4>5. 업무메모 입력안내</h4>
+                        <textarea id="taskMemoPlaceholder" placeholder="사용자가 업무메모에 무엇을 적어야 하는지 안내문을 입력하세요. 예: 지급 지연 사유, 특이사항, 후속조치를 입력하세요."></textarea>
+                      </div>
+                    </div>
+                  </div>
+
+                  <details class="advanced-code popup-fold">
+                    <summary>6. 팝업 · 기간 알림 설정 (클릭하여 펼치기)</summary>
+                    <div class="advanced-body">
+                      <div class="popup-grid" id="popupGrid"></div>
+                      <div class="action-row"><button class="action-btn primary" id="savePopupSettings">알림 저장</button><span class="save-status" id="popupSaved">저장완료</span><button class="action-btn" id="resetPopupSettings">초기화</button></div>
+                    </div>
+                  </details>
+
+                  <details class="advanced-code">
+                    <summary>7. 고급 기능 코드 (필요할 때만 펼치기)</summary>
+                    <div class="advanced-body"><textarea id="advancedCode" placeholder="JavaScript, 계산식, 이벤트, 특수 API 연결 등 본사 관리자용 고급 기능 코드를 입력하세요."></textarea></div>
+                  </details>
+
+                  <div class="action-row"><button class="action-btn primary" id="saveTaskBtn">저장</button><span class="save-status" id="taskSaved">저장완료</span><button class="action-btn" id="resetTaskFormBtn">초기화</button></div>
+                </section>
+              </div>
+            </div>
+          </details>
+        </div>
+      </details>
+    </div>
+  </main>
+</div>
+
+<div class="modal-backdrop" id="newTaskModal"><div class="modal"><h3>신규 업무 생성</h3><label>업무명</label><input id="newTaskName" placeholder="예: 4대보험 신고"><label>목차 구분</label><select id="newTaskGroup"><option value="세부구분">세부구분</option><option value="정기지급">정기지급</option></select><div class="modal-actions"><button class="action-btn" id="cancelNewTask">취소</button><button class="action-btn primary" id="createNewTask">생성</button></div></div></div>
+
+<div class="modal-backdrop" id="noticeModal"><div class="modal"><h3>상단 알림 설정</h3><p style="font-size:12px;color:#687385">업무메모는 저장일부터 5일간 상단에 표시됩니다. 여기서 저장된 알림/메모를 삭제할 수 있습니다.</p><div id="noticeManageList" style="max-height:320px;overflow:auto"></div><div class="modal-actions"><button class="action-btn" id="closeNoticeModal">닫기</button></div></div></div>
+
+
+<div class="modal-backdrop" id="screenSizeModal">
+  <div class="modal">
+    <h3>업무 HTML 화면 크기 설정</h3>
+    <div class="screen-size-grid">
+      <div>
+        <label>높이 방식</label>
+        <select id="screenHeightMode">
+          <option value="fixed">고정 높이</option>
+          <option value="auto">HTML 높이에 맞추기</option>
+        </select>
+      </div>
+      <div>
+        <label>고정 높이(px)</label>
+        <input id="screenHeightValue" type="number" min="300" max="3000" step="20" value="560">
+      </div>
+    </div>
+    <div class="settings-note">HTML 높이에 맞추기를 선택하면 현재 업무 HTML의 실제 내용 높이에 따라 중앙 작업영역이 자동으로 늘어납니다.</div>
+    <div class="modal-actions">
+      <button class="action-btn" id="closeScreenSize">취소</button>
+      <button class="action-btn" id="resetScreenSize">초기화</button>
+      <button class="action-btn primary" id="saveScreenSize">저장</button>
+      <span class="save-status" id="screenSizeSaved">저장완료</span>
+    </div>
+  </div>
+</div>
+
+<div class="runtime-popup" id="runtimePopup">
+  <div class="runtime-box">
+    <h3 id="runtimePopupTitle"></h3>
+    <div id="runtimePopupBody"></div>
+    <div class="runtime-actions"><button class="action-btn primary" id="runtimePopupClose">확인</button></div>
+  </div>
+</div>
+
+<script>
+(() => {
+"use strict";
+const $ = id => document.getElementById(id);
+const params = new URLSearchParams(location.search);
+const WORK = (params.get("work") || "ACCOUNTING").toUpperCase();
+
+const MODULES = {
+  ACCOUNTING:{title:"01 회계경리",prefix:"ACCOUNTING",dates:true},
+  FIELD:{title:"02 현장관리",prefix:"FIELD",dates:false},
+  CONTRACT:{title:"03 계약법무",prefix:"CONTRACT",dates:false},
+  BID:{title:"04 입찰",prefix:"BID",dates:false},
+  LOAN:{title:"05 대출금융",prefix:"LOAN",dates:false},
+  VEHICLE:{title:"06 차량",prefix:"VEHICLE",dates:false},
+  REAL_ESTATE:{title:"07 토지부동산",prefix:"REAL_ESTATE",dates:false},
+  GOV_SUPPORT:{title:"08 정부지원행정",prefix:"GOV_SUPPORT",dates:false},
+  ETC:{title:"09 기타자료",prefix:"ETC",dates:false}
+};
+const MODULE = MODULES[WORK] || MODULES.ACCOUNTING;
+const PREFIX = "taeon.v14."+WORK+".";
+
+function baseTask(id,name,manual="",resources="",links=""){
+  return {id,name,group:"세부구분",active:true,html:"",manual,resources,links,memoPlaceholder:"",display:{mode:"fixed",height:560},advanced:"",popups:[]};
+}
+
+function getInitialTasks(){
+  if(WORK==="ACCOUNTING"){
+    return [
+      baseTask("ACCOUNTING_EXPENSE","지출결의"),
+      baseTask("ACCOUNTING_GENERAL_SALARY","일반급여","급여대장 확인\\n지급 대상 계좌 확인\\n공제/실지급액 확인\\n은행 접속 후 지급\\n완료 및 이력 저장","급여대장.xlsx\\n근로계약서.pdf","국민은행|https://obiz.kbstar.com\\n4대보험|https://www.4insure.or.kr\\n홈택스|https://www.hometax.go.kr"),
+      baseTask("ACCOUNTING_DAILY","일용직"),
+      baseTask("ACCOUNTING_CARD","카드"),
+      baseTask("ACCOUNTING_FIXED","고정지출"),
+      baseTask("ACCOUNTING_VENDOR","업체정산"),
+      baseTask("ACCOUNTING_TRANSACTION","입출금"),
+      baseTask("ACCOUNTING_BALANCE","계좌잔액"),
+      baseTask("ACCOUNTING_TAX","세금계산서")
+    ];
+  }
+  return [baseTask(MODULE.prefix+"_ALL","전체")];
+}
+const initialTasks = getInitialTasks();
+const defaults = {
+  globalFont:'"Malgun Gothic","Apple SD Gothic Neo",sans-serif',
+  globalSize:"13",dateSize:"13",taskSize:"13",leftSize:"12",topBtnSize:"12",rightTitleSize:"13",rightBodySize:"13"
+};
+
+let tasks = [];
+let currentTaskId = null;
+
+function loadTasks(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(PREFIX+"tasks") || "null");
+    tasks = Array.isArray(saved) && saved.length ? saved : initialTasks.map(x=>({...x}));
+  }catch{tasks = initialTasks.map(x=>({...x}))}
+  tasks.forEach(t=>{
+    if(!Array.isArray(t.popups)) t.popups=[];
+    if(typeof t.resources!=="string") t.resources="";
+    if(typeof t.memoPlaceholder!=="string") t.memoPlaceholder="";
+    if(!t.display || typeof t.display!=="object") t.display={mode:"fixed",height:560};
+    if(!t.display.mode) t.display.mode="fixed";
+    if(!t.display.height) t.display.height=560;
+    t.popups=t.popups.map(p=>({
+      enabled:!!p.enabled,
+      type:p.type||"text",
+      target:p.target||"current",
+      title:p.title||"",
+      message:p.message||"",
+      image:p.image||"",
+      link:p.link||"",
+      html:p.html||"",
+      start:p.start||"",
+      end:p.end||""
+    }));
+  });
+}
+function saveTasks(){localStorage.setItem(PREFIX+"tasks",JSON.stringify(tasks))}
+function currentTask(){return tasks.find(t=>t.id===currentTaskId)||null}
+function escapeHtml(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function slugTaskId(name){
+  const cleaned=String(name||"").trim().toUpperCase().replace(/\s+/g,"_").replace(/[^0-9A-Z가-힣_]/g,"");
+  return MODULE.prefix+"_"+(cleaned||"TASK")+"_"+Date.now().toString(36).toUpperCase();
+}
+function showStatus(id,text){
+  const el=$(id); if(!el)return;
+  el.textContent=text; el.classList.add("show");
+  clearTimeout(el.__timer); el.__timer=setTimeout(()=>el.classList.remove("show"),1800);
+}
+function addHistory(area,message){
+  let list=[];try{list=JSON.parse(localStorage.getItem(PREFIX+"history")||"[]")}catch{}
+  list.unshift({time:new Date().toLocaleString("ko-KR"),area,message});
+  localStorage.setItem(PREFIX+"history",JSON.stringify(list.slice(0,100)));
+  renderHistory();
+}
+function renderHistory(){
+  const box=$("historyList");if(!box)return;
+  let list=[];try{list=JSON.parse(localStorage.getItem(PREFIX+"history")||"[]")}catch{}
+  box.innerHTML=list.length?list.map(i=>`<div class="history-item"><div class="history-time">${escapeHtml(i.time)}</div><strong>${escapeHtml(i.area)}</strong><div>${escapeHtml(i.message)}</div></div>`).join(""):'<div class="detail-empty">저장된 변경이력이 없습니다.</div>';
+}
+
+function renderTaskChips(){
+  const box=$("taskChips");box.innerHTML="";
+  tasks.filter(t=>t.group==="세부구분"&&t.active).forEach(t=>{
+    const b=document.createElement("button");
+    b.className="chip"+(t.id===currentTaskId?" active":"");
+    b.textContent=t.name;b.addEventListener("click",()=>selectTask(t.id));box.appendChild(b);
+  });
+}
+function renderTaskManagerList(){
+  const box=$("taskManagerList");box.innerHTML="";
+  tasks.forEach(t=>{
+    const b=document.createElement("button");
+    b.className="task-row-btn"+(t.id===currentTaskId?" active":"")+(!t.active?" inactive":"");
+    b.textContent=`${t.name}${t.active?"":" (삭제됨)"}`;
+    b.addEventListener("click",()=>selectTask(t.id));box.appendChild(b);
+  });
+}
+function renderManualResourcesLinks(task){
+  const manual=$("manualList");
+  const lines=String(task?.manual||"").split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+  manual.innerHTML=lines.length?lines.map(x=>`<li>${escapeHtml(x)}</li>`).join(""):"<li>등록된 업무 매뉴얼이 없습니다.</li>";
+
+  const resources=String(task?.resources||"").split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+  $("relatedData").innerHTML=resources.length?resources.map(x=>`<div>${escapeHtml(x)}</div>`).join(""):"현재 연결자료 없음";
+
+  const links=String(task?.links||"").split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+  $("relatedLinks").innerHTML=links.length?links.map(line=>{
+    const [name,url]=line.split("|");
+    return url?`<a href="${escapeHtml(url.trim())}" target="_blank" rel="noopener">${escapeHtml((name||url).trim())}</a>`:`<span>${escapeHtml(name)}</span>`;
+  }).join(""):'<span style="color:#687385">현재 등록링크 없음</span>';
+}
+function executeScripts(container){
+  [...container.querySelectorAll("script")].forEach(old=>{
+    const s=document.createElement("script");[...old.attributes].forEach(a=>s.setAttribute(a.name,a.value));s.textContent=old.textContent;old.replaceWith(s);
+  });
+}
+function applyWorkHeight(task){
+  const box=$("workContent");
+  const display=task?.display||{mode:"fixed",height:560};
+  box.style.height="";
+  box.style.minHeight="";
+  if(display.mode==="auto"){
+    box.style.minHeight="300px";
+    requestAnimationFrame(()=>{
+      box.style.height="auto";
+      box.style.height=Math.max(300,box.scrollHeight+6)+"px";
+    });
+  }else{
+    const h=Math.max(300,Number(display.height)||560);
+    box.style.minHeight=h+"px";
+    box.style.height=h+"px";
+  }
+}
+
+function renderWork(task){
+  const box=$("workContent");
+  $("workBadge").textContent=task?`${task.name} · HTML 변경 가능`:"HTML 변경 가능 영역";
+  if(!task||!String(task.html||"").trim()){
+    box.innerHTML=`<div class="work-placeholder"><div><h2>${task?escapeHtml(task.name):"통합형 공통 툴 메인 작업영역"}</h2><p>${task?"아직 저장된 업무 화면 HTML이 없습니다.":"업무를 선택하세요."}</p><p>하단 업무 화면 관리에서 HTML을 저장하면 이 영역에 표시됩니다.</p></div></div>`;
+  }else{
+    box.innerHTML=task.html;
+    if(task.advanced&&task.advanced.trim()){const s=document.createElement("script");s.textContent=task.advanced;box.appendChild(s)}
+    executeScripts(box);
+  }
+  applyWorkHeight(task);
+}
+
+function fillTaskEditor(task){
+  $("taskName").value=task?.name||"";
+  $("taskId").value=task?.id||"";
+  $("taskGroup").value=task?.group||"세부구분";
+  $("taskStatus").value=task?(task.active?"ACTIVE":"INACTIVE"):"";
+  $("taskHtml").value=task?.html||"";
+  $("taskManual").value=task?.manual||"";
+  $("taskResources").value=task?.resources||"";
+  $("taskLinks").value=task?.links||"";
+  $("taskMemoPlaceholder").value=task?.memoPlaceholder||"";
+  $("advancedCode").value=task?.advanced||"";
+  renderPopupEditor(task);
+}
+
+function renderPopupEditor(task){
+  const box=$("popupGrid");
+  box.innerHTML="";
+  const arr=[0,1,2].map(i=>task?.popups?.[i]||{
+    enabled:false,type:"text",target:"current",title:"",message:"",image:"",link:"",html:"",start:"",end:""
+  });
+
+  arr.forEach((p,i)=>{
+    const d=document.createElement("div");
+    d.className="popup-card";
+    d.innerHTML=`
+      <h5>팝업 ${i+1}</h5>
+      <label>사용 여부</label>
+      <select data-popup="${i}" data-field="enabled">
+        <option value="false"${!p.enabled?" selected":""}>사용안함</option>
+        <option value="true"${p.enabled?" selected":""}>사용</option>
+      </select>
+
+      <label>표시 형식</label>
+      <select data-popup="${i}" data-field="type">
+        <option value="text"${p.type==="text"?" selected":""}>텍스트 / 인사말</option>
+        <option value="image"${p.type==="image"?" selected":""}>이미지 / 광고</option>
+        <option value="html"${p.type==="html"?" selected":""}>HTML 자유구성</option>
+      </select>
+
+      <label>표시 대상</label>
+      <select data-popup="${i}" data-field="target">
+        <option value="current"${p.target==="current"?" selected":""}>현재 업무만</option>
+        <option value="module"${p.target==="module"?" selected":""}>${MODULE.title} 전체</option>
+        <option value="all"${p.target==="all"?" selected":""}>전체 사용자</option>
+      </select>
+
+      <label>제목</label>
+      <input data-popup="${i}" data-field="title" value="${escapeHtml(p.title)}" placeholder="예: 4대보험 신고기간 / 환영합니다">
+
+      <label>텍스트 내용</label>
+      <textarea data-popup="${i}" data-field="message" placeholder="공지, 인사말, 안내문 내용을 입력">${escapeHtml(p.message)}</textarea>
+
+      <label>이미지 선택</label>
+      <input type="file" accept="image/*" data-popup-image-file="${i}">
+      <input type="hidden" data-popup="${i}" data-field="image" value="${escapeHtml(p.image)}">
+      <div class="popup-preview" data-popup-preview="${i}">
+        ${p.image?`<img src="${p.image}" alt="팝업 이미지 미리보기">`:'<span class="type-note">이미지 광고를 사용할 경우 이미지를 선택하세요.</span>'}
+      </div>
+
+      <label>클릭 링크 URL</label>
+      <input data-popup="${i}" data-field="link" value="${escapeHtml(p.link)}" placeholder="https://...">
+
+      <label>HTML 내용</label>
+      <textarea data-popup="${i}" data-field="html" placeholder="<div>이미지 + 문구 + 버튼 등 자유 HTML</div>">${escapeHtml(p.html)}</textarea>
+
+      <label>시작일</label>
+      <input type="date" data-popup="${i}" data-field="start" value="${escapeHtml(p.start)}">
+
+      <label>종료일</label>
+      <input type="date" data-popup="${i}" data-field="end" value="${escapeHtml(p.end)}">
+
+      <div class="type-note">텍스트=공지·인사말 / 이미지=광고 / HTML=이미지·버튼·링크 자유구성</div>
+    `;
+    box.appendChild(d);
+  });
+
+  box.querySelectorAll("[data-popup-image-file]").forEach(input=>{
+    input.addEventListener("change",e=>{
+      const idx=e.target.dataset.popupImageFile;
+      const file=e.target.files?.[0];
+      if(!file)return;
+      const reader=new FileReader();
+      reader.onload=()=>{
+        const hidden=box.querySelector(`[data-popup="${idx}"][data-field="image"]`);
+        if(hidden)hidden.value=reader.result;
+        const preview=box.querySelector(`[data-popup-preview="${idx}"]`);
+        if(preview)preview.innerHTML=`<img src="${reader.result}" alt="팝업 이미지 미리보기">`;
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+}
+
+function collectPopupEditor(){
+  const arr=[0,1,2].map(()=>({
+    enabled:false,type:"text",target:"current",title:"",message:"",image:"",link:"",html:"",start:"",end:""
+  }));
+  document.querySelectorAll("[data-popup]").forEach(el=>{
+    const i=Number(el.dataset.popup),f=el.dataset.field;
+    arr[i][f]=f==="enabled"?(el.value==="true"):el.value;
+  });
+  return arr;
+}
+function selectTask(id){
+  currentTaskId=id;const task=currentTask();
+  renderTaskChips();renderTaskManagerList();fillTaskEditor(task);renderManualResourcesLinks(task);renderWork(task);
+  $("workMemo").value=localStorage.getItem(PREFIX+"memo."+id)||"";
+  $("workMemo").placeholder=task?.memoPlaceholder?.trim() || "현재 업무에 대한 메모를 입력하세요. 저장하면 최근 5일간 상단 알림줄에 표시됩니다.";
+  checkTaskPopups(task);
+}
+function ensureSelection(){const t=tasks.find(x=>x.active)||tasks[0];if(t)selectTask(t.id)}
+
+function todayISO(){const d=new Date();return d.toISOString().slice(0,10)}
+function checkTaskPopups(task){
+  if(!task||!Array.isArray(task.popups))return;
+  const today=todayISO();
+  const p=task.popups.find(x=>
+    x.enabled &&
+    (!x.start||today>=x.start) &&
+    (!x.end||today<=x.end) &&
+    (x.title||x.message||x.image||x.html)
+  );
+  if(!p)return;
+
+  $("runtimePopupTitle").textContent=p.title||"안내";
+  const body=$("runtimePopupBody");
+
+  if(p.type==="image"&&p.image){
+    const img=`<img src="${p.image}" alt="${escapeHtml(p.title||"팝업 이미지")}" style="max-width:100%;max-height:420px;display:block;margin:0 auto;border-radius:8px">`;
+    body.innerHTML=p.link?`<a href="${escapeHtml(p.link)}" target="_blank" rel="noopener">${img}</a>`:img;
+    if(p.message)body.innerHTML+=`<p style="white-space:pre-wrap;line-height:1.7">${escapeHtml(p.message)}</p>`;
+  }else if(p.type==="html"&&p.html){
+    body.innerHTML=p.html;
+  }else{
+    body.innerHTML=`<p style="white-space:pre-wrap;line-height:1.7">${escapeHtml(p.message||"")}</p>`;
+    if(p.link)body.innerHTML+=`<p><a href="${escapeHtml(p.link)}" target="_blank" rel="noopener" style="color:#215fcb">자세히 보기</a></p>`;
+  }
+
+  $("runtimePopup").classList.add("show");
+}
+$("runtimePopupClose").addEventListener("click",()=>$("runtimePopup").classList.remove("show"));
+
+/* clock */
+function updateClock(){
+  const d=new Date();
+  $("clockBox").textContent=d.toLocaleDateString("ko-KR",{year:"numeric",month:"2-digit",day:"2-digit",weekday:"short"})+" "+d.toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"});
+}
+updateClock();setInterval(updateClock,1000);
+
+/* notices */
+function getNotices(){try{return JSON.parse(localStorage.getItem(PREFIX+"notices")||"[]")}catch{return []}}
+function saveNotices(x){localStorage.setItem(PREFIX+"notices",JSON.stringify(x))}
+function cleanupNotices(){
+  const now=Date.now();
+  const keep=getNotices().filter(n=>new Date(n.expiresAt).getTime()>=now);
+  saveNotices(keep);return keep;
+}
+function renderNoticeStrip(){
+  const list=cleanupNotices();
+  $("noticeTrack").textContent=list.length?list.map(n=>`[${n.taskName}] ${n.text}`).join("   •   "):"최근 5일 알림이 없습니다.";
+}
+function addMemoNotice(task,text){
+  const list=cleanupNotices();
+  const created=new Date(), expires=new Date(created.getTime()+5*24*60*60*1000);
+  list.unshift({id:"N"+Date.now(),taskId:task.id,taskName:task.name,text,createdAt:created.toISOString(),expiresAt:expires.toISOString()});
+  saveNotices(list.slice(0,30));renderNoticeStrip();
+}
+function renderNoticeManager(){
+  const list=cleanupNotices();
+  const box=$("noticeManageList");
+  box.innerHTML=list.length?list.map(n=>`<div style="border:1px solid #e2e6ec;border-radius:7px;padding:8px;margin-bottom:7px"><div style="font-size:10px;color:#7a8494">${escapeHtml(new Date(n.createdAt).toLocaleString("ko-KR"))} ~ ${escapeHtml(new Date(n.expiresAt).toLocaleDateString("ko-KR"))}</div><div style="font-size:12px;margin-top:3px"><strong>${escapeHtml(n.taskName)}</strong> ${escapeHtml(n.text)}</div><button class="action-btn danger" style="margin-top:6px" data-delete-notice="${n.id}">삭제</button></div>`).join(""):'<div class="detail-empty">등록된 알림이 없습니다.</div>';
+  box.querySelectorAll("[data-delete-notice]").forEach(b=>b.addEventListener("click",()=>{
+    saveNotices(getNotices().filter(n=>n.id!==b.dataset.deleteNotice));renderNoticeManager();renderNoticeStrip();
+  }));
+}
+$("noticeGear").addEventListener("click",()=>{renderNoticeManager();$("noticeModal").classList.add("show")});
+$("closeNoticeModal").addEventListener("click",()=>$("noticeModal").classList.remove("show"));
+renderNoticeStrip();
+
+/* task actions */
+$("newTaskBtn").addEventListener("click",()=>{$("newTaskName").value="";$("newTaskGroup").value="세부구분";$("newTaskModal").classList.add("show");setTimeout(()=>$("newTaskName").focus(),50)});
+$("cancelNewTask").addEventListener("click",()=>$("newTaskModal").classList.remove("show"));
+$("createNewTask").addEventListener("click",()=>{
+  const name=$("newTaskName").value.trim(),group=$("newTaskGroup").value;if(!name){alert("업무명을 입력하세요.");return}
+  const task={id:slugTaskId(name),name,group,active:true,html:"",manual:"",resources:"",links:"",memoPlaceholder:"",display:{mode:"fixed",height:560},advanced:"",popups:[]};
+  tasks.push(task);saveTasks();currentTaskId=task.id;$("newTaskModal").classList.remove("show");selectTask(task.id);showStatus("taskActionStatus","신규완료");addHistory("신규업무",`${name} 생성`);
+});
+$("deleteTaskBtn").addEventListener("click",()=>{
+  const task=currentTask();if(!task)return;if(!task.active){showStatus("taskActionStatus","이미 삭제상태");return}
+  task.active=false;saveTasks();renderTaskChips();renderTaskManagerList();fillTaskEditor(task);showStatus("taskActionStatus","삭제완료");addHistory("업무삭제",`${task.name} 비활성화`);
+  const next=tasks.find(t=>t.active);if(next)selectTask(next.id);
+});
+$("restoreTaskBtn").addEventListener("click",()=>{
+  const task=currentTask();if(!task)return;if(task.active){showStatus("taskActionStatus","현재 정상상태");return}
+  task.active=true;saveTasks();selectTask(task.id);showStatus("taskActionStatus","복구완료");addHistory("업무복구",`${task.name} 다시 활성화`);
+});
+$("saveTaskBtn").addEventListener("click",()=>{
+  const task=currentTask();if(!task){alert("업무를 먼저 선택하거나 신규 생성하세요.");return}
+  task.name=$("taskName").value.trim()||task.name;task.group=$("taskGroup").value;task.html=$("taskHtml").value;task.manual=$("taskManual").value;task.resources=$("taskResources").value;task.links=$("taskLinks").value;task.memoPlaceholder=$("taskMemoPlaceholder").value;task.advanced=$("advancedCode").value;task.popups=collectPopupEditor();
+  saveTasks();selectTask(task.id);showStatus("taskSaved","저장완료");addHistory("업무화면 저장",`${task.name} HTML/업무처리/자료/링크/메모안내 저장`);
+});
+$("resetTaskFormBtn").addEventListener("click",()=>{fillTaskEditor(currentTask());$("taskSaved").classList.remove("show")});
+$("savePopupSettings").addEventListener("click",()=>{const t=currentTask();if(!t)return;t.popups=collectPopupEditor();saveTasks();showStatus("popupSaved","저장완료");addHistory("팝업 설정",`${t.name} 텍스트/이미지/HTML 팝업·기간알림 저장`)});
+$("resetPopupSettings").addEventListener("click",()=>{const t=currentTask();if(!t)return;t.popups=[];saveTasks();renderPopupEditor(t);$("popupSaved").classList.remove("show")});
+
+
+/* screen size */
+$("screenSizeBtn").addEventListener("click",()=>{
+  const task=currentTask();if(!task)return;
+  const display=task.display||{mode:"fixed",height:560};
+  $("screenHeightMode").value=display.mode||"fixed";
+  $("screenHeightValue").value=display.height||560;
+  $("screenSizeModal").classList.add("show");
+});
+$("closeScreenSize").addEventListener("click",()=>$("screenSizeModal").classList.remove("show"));
+$("saveScreenSize").addEventListener("click",()=>{
+  const task=currentTask();if(!task)return;
+  task.display={mode:$("screenHeightMode").value,height:Math.max(300,Number($("screenHeightValue").value)||560)};
+  saveTasks();applyWorkHeight(task);showStatus("screenSizeSaved","저장완료");
+  addHistory("화면크기",`${task.name} ${task.display.mode==="auto"?"HTML 자동높이":task.display.height+"px"} 저장`);
+});
+$("resetScreenSize").addEventListener("click",()=>{
+  const task=currentTask();if(!task)return;
+  task.display={mode:"fixed",height:560};$("screenHeightMode").value="fixed";$("screenHeightValue").value="560";
+  saveTasks();applyWorkHeight(task);$("screenSizeSaved").classList.remove("show");
+});
+
+/* memo */
+$("saveMemo").addEventListener("click",()=>{
+  if(!currentTaskId)return;
+  const text=$("workMemo").value.trim();
+  localStorage.setItem(PREFIX+"memo."+currentTaskId,text);
+  if(text)addMemoNotice(currentTask(),text);
+  showStatus("memoSaved","저장완료");addHistory("업무메모",`${currentTask()?.name||""} 메모 저장`);
+});
+$("resetMemo").addEventListener("click",()=>{if(!currentTaskId)return;localStorage.removeItem(PREFIX+"memo."+currentTaskId);$("workMemo").value="";$("memoSaved").classList.remove("show")});
+
+/* input test */
+function chooseFile(accept){const input=$("fileInput");input.accept=accept;input.value="";input.click()}
+$("pdfBtn").addEventListener("click",()=>chooseFile(".pdf,.doc,.docx,.hwp,.hwpx"));
+$("excelBtn").addEventListener("click",()=>chooseFile(".xls,.xlsx,.csv"));
+$("imageBtn").addEventListener("click",()=>chooseFile("image/*"));
+$("textBtn").addEventListener("click",()=>{const text=prompt("텍스트를 입력하세요.");if(text!==null)$("relatedData").textContent="텍스트 입력됨 · 실제 API 연결 전 테스트"});
+$("fileInput").addEventListener("change",e=>{const f=e.target.files?.[0];if(f)$("relatedData").textContent=`선택파일: ${f.name} · 실제 API 연결 전 테스트`});
+
+/* bottom five */
+const panelInfo={modify:["수정사항","입력 / 저장"],question:["질의사항","입력 / 저장"],check:["점검사항","입력 / 저장"],admin:["관리자 설정","본사 통제"],history:["변경이력","저장 기록"]};
+document.querySelectorAll(".status-card").forEach(card=>card.addEventListener("click",()=>{
+  const key=card.dataset.panel;document.querySelectorAll(".status-card").forEach(x=>x.classList.remove("active"));card.classList.add("active");
+  $("detailEmpty").hidden=true;document.querySelectorAll(".detail-view").forEach(v=>v.hidden=true);$("view-"+key).hidden=false;
+  $("detailTitle").textContent=panelInfo[key][0];$("detailBadge").textContent=panelInfo[key][1];if(key==="history")renderHistory();
+}));
+["modifyText","questionText","checkText"].forEach(id=>{const saved=localStorage.getItem(PREFIX+id);if(saved!==null)$(id).value=saved});
+document.querySelectorAll("[data-save-field]").forEach(btn=>btn.addEventListener("click",()=>{
+  const id=btn.dataset.saveField;localStorage.setItem(PREFIX+id,$(id).value);showStatus("saved-"+id,"저장완료");addHistory(btn.dataset.label||"저장",String($(id).value||"").slice(0,80));
+}));
+document.querySelectorAll("[data-reset-field]").forEach(btn=>btn.addEventListener("click",()=>{const id=btn.dataset.resetField;localStorage.removeItem(PREFIX+id);$(id).value="";$("saved-"+id)?.classList.remove("show")}));
+
+/* settings */
+const settingIds=["globalFont","globalSize","dateSize","taskSize","leftSize","topBtnSize","rightTitleSize","rightBodySize"];
+function applySettings(){
+  const root=document.documentElement.style;
+  root.setProperty("--global-font",$("globalFont").value);root.setProperty("--global-size",$("globalSize").value+"px");root.setProperty("--date-size",$("dateSize").value+"px");root.setProperty("--task-size",$("taskSize").value+"px");root.setProperty("--left-size",$("leftSize").value+"px");root.setProperty("--top-button-size",$("topBtnSize").value+"px");root.setProperty("--right-title-size",$("rightTitleSize").value+"px");root.setProperty("--right-body-size",$("rightBodySize").value+"px");
+}
+settingIds.forEach(id=>{const saved=localStorage.getItem(PREFIX+id);$(id).value=saved!==null?saved:defaults[id];$(id).addEventListener("input",applySettings);$(id).addEventListener("change",applySettings)});
+applySettings();
+$("saveSettings").addEventListener("click",()=>{settingIds.forEach(id=>localStorage.setItem(PREFIX+id,$(id).value));applySettings();showStatus("settingsSaved","저장완료");addHistory("관리자 설정","화면 글자/폰트 설정 저장")});
+$("resetSettings").addEventListener("click",()=>{settingIds.forEach(id=>{localStorage.removeItem(PREFIX+id);$(id).value=defaults[id]});applySettings();$("settingsSaved").classList.remove("show")});
+$("clearHistory").addEventListener("click",()=>{localStorage.removeItem(PREFIX+"history");renderHistory()});
+
+/* module / navigation */
+$("moduleTitle").textContent=MODULE.title;
+document.title="TAEON V2 - "+MODULE.title;
+if(!MODULE.dates) $("dateGroup").style.display="none";
+
+document.querySelectorAll("[data-work]").forEach(btn=>{
+  const work=btn.dataset.work;
+  if(work===WORK) btn.classList.add("active");
+  btn.addEventListener("click",()=>{
+    if(work==="JOURNAL"){ location.href="journal.html"; return; }
+    if(work==="FOLLOWUPS"){ location.href="followups.html"; return; }
+    location.href="go.html?work="+encodeURIComponent(work);
+  });
+});
+$("adminOpenBtn").addEventListener("click",()=>{
+  const master=document.querySelector("details.master-fold");
+  if(master) master.open=true;
+  const adminCard=document.querySelector('.status-card[data-panel="admin"]');
+  if(adminCard) adminCard.click();
+  master?.scrollIntoView({behavior:"smooth",block:"start"});
+});
+
+/* init */
+loadTasks();renderTaskChips();renderTaskManagerList();ensureSelection();renderHistory();
+})();
+</script>
+</body>
+</html>
